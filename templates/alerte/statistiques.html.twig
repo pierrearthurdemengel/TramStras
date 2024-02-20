@@ -1,0 +1,102 @@
+{% extends 'base.html.twig' %}
+
+{% block head %}
+    {{ parent() }}
+{% endblock %}
+
+{% block title %}Statistiques des Alertes{% endblock %}
+
+{% block stylesheet %}
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .table th, .table td {
+            text-align: center;
+        }
+        .table tbody tr:nth-of-type(odd) {
+            background-color: #f2f2f2;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <h1>Statistiques des Alertes</h1>
+    <main class="content-container">
+    <div class="center-wrapper">
+        <select id="ligneSelect">
+            <option value="">Sélectionnez une ligne</option>
+            {% for ligne in lignes %}
+                <option value="{{ ligne }}">{{ ligne }}</option>
+            {% endfor %}
+        </select>
+
+        <canvas id="myChart" width="800" height="400"></canvas>
+
+    </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var colorMapping = {
+            'Ligne A': '#e10d19',
+            'Ligne B': '#009ee0',
+            'Ligne C': '#f29400',
+            'Ligne D': '#009933',
+            'Ligne E': '#9085ba',
+            'Ligne F': '#97bf0d'
+        };
+
+        var statistiques = {{ statistiques|json_encode|raw }};
+        var currentChart;
+
+        function updateChart() {
+            var ligne = document.getElementById('ligneSelect').value;
+            if (currentChart) {
+                currentChart.destroy();
+            }
+            if (ligne) {
+                var ctx = document.getElementById('myChart').getContext('2d');
+                
+                var labels = Array.from({length: 24}, (v, i) => i + "h"); // ["0h", "1h", ..., "23h"]
+
+                // Initialisation de l'array de données avec des zéros
+                var dataArray = Array(24).fill(0);
+
+                // Remplir dataArray avec les valeurs de statistiques correspondantes
+                statistiques.filter(stat => stat.ligne === ligne).forEach(stat => {
+                    var heure = parseInt(stat.heure);
+                    if (!isNaN(heure) && heure >= 0 && heure < 24) {
+                        dataArray[heure] = stat.nbAlertes;
+                    }
+                });
+
+                var data = {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Nombre d’alertes',
+                        data: dataArray,
+                        backgroundColor: colorMapping[ligne] ? colorMapping[ligne] + '66' : 'rgba(75, 192, 192, 0.2)',  // Utilisez la couleur avec une opacité de 0.4 (66 en hexadécimal) si disponible sinon une couleur par défaut
+                        borderColor: colorMapping[ligne] || 'rgba(75, 192, 192, 1)', // Utilisez la couleur si disponible sinon une couleur par défaut
+                        borderWidth: 1
+                    }]
+                };
+
+
+                currentChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: data,
+                    // Vous pouvez ajouter d'autres options de graphique ici si nécessaire
+                });
+            }
+        }
+        
+        // Initialisez le graphique une fois le document chargé
+        updateChart();
+
+        // Attachez l'écouteur d'événements au select
+        document.getElementById('ligneSelect').addEventListener('change', updateChart);
+    });
+</script>
+
+
+
+{% endblock %}

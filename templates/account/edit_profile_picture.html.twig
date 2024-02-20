@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Modifier la photo de profil</h1>
+    <div class="card p-4">
+        {{ form_start(form) }}
+        
+        <div class="mb-3">
+            {{ form_label(form.imageFile, 'Image (fichier PNG ou JPEG)', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.imageFile, {'attr': {'class': 'form-control'}}) }}
+        </div>
+
+        
+        <button type="submit" class="btn btn-primary">Mettre à jour</button>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

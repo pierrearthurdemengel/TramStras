@@ -1,0 +1,117 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+
+<h1>Bienvenue sur TramStras</h1>
+<h2> Le site par et pour les Strasbourgeois ! </h2>
+
+    {% for message in app.flashes('warning') %}
+    <div class="alert">
+        {{ message}}
+    </div>
+    {% endfor %}
+
+<div class="card-wrapper">
+
+<a href="{{ path('points_map') }}" class="card-menu">
+  <div class="card-face front-face" data-card="network"> 
+    <div class="card-content">
+        <p>Carte du réseau</p>
+    </div>
+  </div>
+  <div class="card-face back-face"></div>
+</a>
+
+<a href="{{ path('get_alerte') }}" class="card-menu">
+    <div class="card-face front-face" data-card="help">
+        <div class="card-content">
+            <p>Demander de l'aide</p>
+        </div>
+    </div>
+    <div class="card-face back-face"></div>
+</a>
+
+ 
+    <a href="{{ path('app_categorie') }}" class="card-menu">
+        <div class="card-face front-face" data-card="forum">
+            <div class="card-content">
+                <p>Forum</p>
+            </div>
+        </div>
+        <div class="card-face back-face"></div>
+    </a>
+
+    <a href="{{ path('messageCTS') }}" class="card-menu">
+        <div class="card-face front-face" data-card="messagesCTS">
+            <div class="card-content">
+                <p>messages CTS</p>
+            </div>
+        </div>
+        <div class="card-face back-face"></div>
+    </a>
+
+        <a href="{{ path('app_menu_tarif') }}" class="card-menu">
+        <div class="card-face front-face" data-card="tarifsCTS">
+            <div class="card-content">
+                <p>Tarifs CTS</p>
+            </div>
+        </div>
+        <div class="card-face back-face"></div>
+    </a>
+
+
+
+</div>
+
+{% endblock %}
+{% block javascripts %}
+    <script>
+
+
+function easeOutQuart(t) {
+    return 1 - (--t) * t * t * t;
+}
+
+window.addEventListener('mousemove', (event) => {
+    let cardMenus = document.querySelectorAll('.card-menu');
+    cardMenus.forEach((cardMenu) => {
+        let boundingRect = cardMenu.getBoundingClientRect();
+        if (
+            event.clientX >= boundingRect.left &&
+            event.clientX <= boundingRect.right &&
+            event.clientY >= boundingRect.top &&
+            event.clientY <= boundingRect.bottom
+        ) {
+            let x = boundingRect.left + boundingRect.width / 2;
+            let y = boundingRect.top + boundingRect.height / 2;
+            let deltaX = event.clientX - x;
+            let deltaY = event.clientY - y;
+            // Inverse les valeurs des rotations pour les axes haut-bas et gauche-droite
+            let rotationX = Math.max(Math.min(deltaY / -10, 30), -30); // Changé ici
+            let rotationY = Math.max(Math.min(deltaX / 10, 30), -30); // Et ici
+            // Utilise la fonction d'interpolation pour adoucir l'effet
+            let distanceFactor = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+            distanceFactor = Math.min(distanceFactor, 100) / 100; // Limite le facteur entre 0 et 1
+            rotationX *= distanceFactor;
+            rotationY *= distanceFactor;
+
+            cardMenu.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg) translateZ(30px)`;
+        } else {
+            cardMenu.style.transform = 'rotateX(0) rotateY(0) translateZ(0)';
+        }
+    });
+});
+
+window.addEventListener('mouseout', (event) => {
+    let cardMenus = document.querySelectorAll('.card-menu');
+    cardMenus.forEach((cardMenu) => {
+        cardMenu.style.transform = 'rotateX(0) rotateY(0) translateZ(0)';
+    });
+});
+
+
+
+
+    </script>
+{% endblock %}

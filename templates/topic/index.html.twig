@@ -1,0 +1,16 @@
+{# templates/topic/index.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des topics{% endblock %}
+
+{% block body %}
+    <h1>Liste des topics</h1>
+    <ul>
+        {% for topic in topics %}
+            <li>
+                <a href="{{ path('app_topic_show', {'id': topic.id}) }}">{{ topic.titre }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,0 +1,2288 @@
+/* Importation de la police Poppins */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap");
+
+:root {
+  /* Variables de couleur */
+  --red-color: #e53236;
+  --darkred-color: #c7353a;
+  --white-color: #f4f0f0;
+  --grey-color: #b9b5b2;
+  --black-color: #35405B;
+  
+  /* Variables pour les transitions */
+  --transition-speed: 0.3s;
+  
+  /* Variables pour les ombres */
+  --shadow-light: 8px 8px 12px #bcbcbc; /* Ombre claire */
+  --shadow-dark: -8px -8px 12px #ffffff; /* Ombre sombre */
+  
+  /* Variables pour le Neumorphisme des cards */
+  --card-shadow-neumorphism: 8px 8px 16px #aea8a8, -8px -8px 16px #ffffff;
+  --card-shadow-inset-neumorphism: inset 4px 4px 8px #aea8a8, inset -4px -4px 8px #ffffff;
+  
+  /* Variables pour le Neumorphisme des boutons */
+  --btn-shadow-neumorphism: 4px 4px 8px #aea8a8, -4px 0px 8px #ffffff;
+  --btn-shadow-inset-neumorphism: inset 2px 2px 4px #aea8a8, inset -2px -2px 4px #ffffff;
+  
+  /* Autres variables */
+  --background-color: #e4e4e4;
+}
+
+/* Darkmode variables */
+[data-theme="dark"] {
+  /* Dark mode colors */
+  --red-color: #a50000; /* Remplacez par la couleur souhaitée */
+  --darkred-color: #850000; /* Remplacez par la couleur souhaitée */
+  --white-color: black;
+  --grey-color: #666666; /* Remplacez par la couleur souhaitée */
+  --black-color: #f4f0f0; /* Remplacez par la couleur souhaitée */
+  --background-color: #202020; /* Remplacez par la couleur souhaitée */
+}
+
+body[data-theme="dark"] {
+  background-color: var(--background-color);
+  color: var(--white-color);
+  /* Et ainsi de suite pour les autres éléments de votre site web */
+}
+
+/* Mettez à jour d'autres éléments en fonction de vos besoins. Par exemple: */
+body[data-theme="dark"] .navbar {
+  background-color: var(--grey-color);
+}
+body[data-theme="dark"] h1, body[data-theme="dark"] h2, body[data-theme="dark"] p {
+  color: var(--black-color);
+}
+
+body[data-theme="light-mode"] {
+  background-color: white;
+  color: black;
+}
+
+
+/* Animation pour le fond */
+@keyframes gradient-background {
+  0% {
+    background-position: 0 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+body {
+  font-family: "Poppins", Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(-45deg, var(--red-color), var(--white-color), var(--grey-color));
+  background-size: 200% 200%;
+  animation: gradient-background 15s ease infinite;
+}
+
+/* Styles pour les écrans en dessous de 850px */
+@media (max-width: 850px) {
+  /* Simplification de l'animation de fond pour une meilleure performance sur mobile */
+  body {
+      /* Si vous souhaitez garder l'animation, vous pouvez réduire sa durée ou supprimer cette règle */
+      animation: none;
+      /* Ajuster le dégradé pour un meilleur rendu sur mobile */
+      background: linear-gradient(-45deg, var(--red-color), var(--white-color));
+  }
+  
+  /* Autres ajustements pour mobile */
+  /* Vous pouvez ajuster la taille des polices, les marges, les rembourrages, etc. pour qu'ils soient mieux adaptés aux petits écrans */
+  header, #navbar {
+      padding: 10px;
+      display: flex;
+  }
+}
+
+@media (min-width: 850px) and (max-width: 3840px) {
+/* En-tête et barre de navigation */
+header, #navbar {
+  background-color: var(--background-color);
+  color: var(--black-color);
+  box-shadow: var(--box-shadow-neumorphism);
+}
+
+
+#navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  position: sticky;
+  top : 0;
+  z-index: 10;
+  transition: top 1s ease-in-out;
+}
+
+.navbar-left, .navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-left {
+  justify-content: flex-start;
+  padding-left: 1%;
+}
+
+.navbar-right {
+  justify-content: flex-end;
+  position: initial;
+  top: 40%;
+  right: 1%;
+}
+
+#navbar ul {
+  z-index: 999;
+  align-items: center;
+  list-style-type: none;
+  padding-left: 0;
+  height: 100% !important;
+  width: 100%;
+  display: inline-flex;
+  justify-content: space-between;
+}
+
+#navbar ul li {
+  margin-right: 15px;
+}
+
+#navbar ul li:last-child {
+  margin-right: 0;
+}
+
+#navbar ul li a {
+  color: var(--black-color);
+  font-size: 16px;
+  text-decoration: none;
+  transition: color var(--transition-speed);
+  position: sticky;
+}
+
+#navbar ul li a:active {
+  color: var(--darkred-color);
+}
+
+/* Position de l'icône utilisateur */
+#navbar ul li.user-icon {
+  order: 1;
+  margin-left: auto;
+}
+
+/* Menu déroulant pour l'utilisateur */
+.user-dropdown {
+  position: relative;
+  top: 0;
+  z-index: 9999;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+}
+
+.user-dropdown:active {
+    background-color: #f0f0f0;
+}
+
+.user-dropdown a {
+    color: #333;
+    padding: 10px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.user-dropdown a:active {
+    background-color: #ddd;
+}
+
+
+.dropdown-content {
+  display: none;
+  background-color: var(--background-color);
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+}
+
+.dropdown-content a {
+  color: var(--black-color);
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.user-dropdown:active .dropdown-content {
+  display: block;
+}
+
+/* Image de profile user */
+#ImgProfile {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  margin: auto;
+  padding-top: 5%;
+}
+}
+
+
+/* Icône utilisateur pour états connecté et déconnecté */
+li > a[href="{{ path('app_account') }}"], li > a[href="{{ path('app_login') }}"] {
+  background-size: 20px 20px;
+  background-repeat: no-repeat;
+  background-position: left center;
+  padding-left: 25px;
+}
+
+/* Ajustements pour les vues mobiles */
+@media (min-width: 650px) and (max-width: 850px) {
+
+
+    #navbar ul {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        flex-direction: column;
+        text-align: center;
+        transition: 0.25s;
+        justify-content: space-between;
+        padding: 15px;
+        z-index: 9999;
+        border-radius: 0;
+    }
+
+#navbar ul li a:active {
+  color : none;
+  background-color: var(--white-color);
+}
+
+.navbar-right {
+  position: fixed;
+  top: 40%;
+  right: 1%;
+}
+
+#navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  position: sticky;
+  top: 0;
+  z-index: 1001;
+  transition: top 1s ease-in-out;
+}
+}
+
+#menu-icon {
+    display: none;
+    cursor: pointer;
+    font-size: 30px;
+    z-index: 1001;
+    background-color: #20202000;
+    padding: 10px; /* providing some space around the icon */
+    border-radius: 8px; /* rounded corners */
+    box-shadow: -5px -5px 10px rgba(255, 255, 255, 0), 5px 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+#menu-icon::before {
+  content: '☰'; /* Default appearance */
+}
+
+#menu-icon.active::before {
+  content: '\2715'; /* Appearance when active */
+}
+
+/* Div d'arrière-plan flou */
+#background-blur {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.7); /* Noir avec opacité */
+  backdrop-filter: blur(5px); /* Ajout du flou */
+  z-index: 998; /* Assurez-vous qu'il est sous le menu */
+}
+
+
+/* Ajustements pour les petits écrans */
+@media (max-width: 850px) {
+  #menu-icon {
+      display: block;
+      color: var(--black-color);
+      transition: color var(--transition-speed);
+  }
+
+  #menu-icon:hover {
+      color: var(--darkred-color);
+  }
+
+  #navbar-logo {
+      width: 50%;
+      height: 50%;
+  }
+
+  .navbar-left {
+    z-index : 999;
+    background-color: var(--neumorphic-bg, #e0e0e0); /* Couleur de fond neutre pour le neumorphism */
+    border-radius: 10px; /* Arrondis doux */
+    padding: 10px; /* Espace interne pour séparer le contenu des bords */
+    box-shadow: 
+        -8px -8px 16px rgba(255, 255, 255, 0.7), /* Ombre claire, augmentée pour plus de profondeur */
+         8px  8px 16px rgba(0, 0, 0, 0.15); /* Ombre foncée, augmentée pour plus de profondeur */
+
+  justify-content: flex-start;
+  padding-left: 1%;
+  width: 100vh;  /* Si vous souhaitez que cela soit la hauteur, c'est correct. Sinon, changez à 100% pour la largeur. */
+  position: fixed;
+  top: 20%;
+  left: 50%;  /* le point de départ au centre */
+  transform: translateX(-50%);  /* déplace le bloc de 50% de sa largeur vers la gauche pour le centrer */
+}
+
+
+
+  header, #navbar {
+      background-color: #20202000;
+      color: var(--black-color);
+      box-shadow: var(--box-shadow-neumorphism);
+  }
+
+  #menu-left{
+    background-color: var(--white-color);
+  }
+
+  #navbar ul {
+      top: 0;
+      bottom: 0;  /* prenez toute la hauteur de la page */
+      left: 0;
+      right: 0;  /* prenez toute la largeur de la page */
+      border-radius: 0;  /* pas de coins arrondis puisqu'il couvre tout */
+      position: sticky;
+      flex-direction: column;
+      text-align: center;
+      transition: 0.25s;
+      z-index: 1000;
+      justify-content: space-between;
+      padding: 15px; /* Space inside the menu */
+      z-index: 999;
+  }
+
+  #navbar ul li {
+      padding: 3px 0;
+  }
+
+  #navbar ul li:hover {
+      background: var(--darkred-color);
+      box-shadow: inset -3px -3px 7px rgba(255, 255, 255, 0.5), inset 3px 3px 7px rgba(0, 0, 0, 0.15); /* Inset shadow for hover to create a pressed effect */
+  }
+
+  #menu-icon.active::before {
+      content: '\2715';
+  }
+
+  #menu.open {
+      left: 41%;
+      top: 32%;
+      position: fixed;
+      visibility: visible;
+      opacity: 1;
+      width: 100%;  /* prend toute la largeur */
+      height: 100vh;  /* prend toute la hauteur de l'écran */
+  }
+
+  #menu {
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility var(--transition-speed), opacity var(--transition-speed) linear;
+  }
+}
+
+/* Styles pour smartphones (inférieur à 600px) */
+@media (max-width: 600px) {
+
+  #menu-left {
+    background: var(--background-color);
+    border-radius: 15px;
+    box-shadow: var(--card-shadow-neumorphism);
+    padding: 10px;
+}
+
+#menu-left li {
+    margin: 10px 0;
+    border-radius: 10px;
+    padding: 5px 10px;
+    transition: background var(--transition-speed);
+}
+
+#menu-left li:hover {
+    background: var(--white-color);
+    box-shadow: var(--btn-shadow-inset-neumorphism);
+}
+
+#menu-left a {
+    text-decoration: none;
+    color: var(--black-color);
+    transition: color var(--transition-speed);
+}
+
+#menu-left a:hover {
+    color: var(--whiite-color);
+}
+
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    top: -159%;
+    right: 133%;
+    background-color: var(--background-color);
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+li {
+  color: #333;
+  padding: 10px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+  /* Rembourrage réduit pour la barre de navigation */
+  #navbar {
+    padding: 0 10px;
+    top: -20%; 
+  }
+
+  /* Logo de la barre de navigation réduit */
+  #navbar-logo {
+    width: 30%;
+    height: 30%;
+  }
+
+  /* Augmenter la taille de l'icône du menu pour une meilleure accessibilité */
+  #menu-icon {
+    font-size: 40px;
+    padding: 15px;
+  }
+
+  /* Optimiser le menu pour les petits écrans, comme les smartphones */
+  #navbar ul {
+    padding: 0px;
+    display: block;
+    position: sticky;
+  }
+
+  #navbar ul li {
+    padding: 5px 0;
+  }
+
+  /* Réduire la taille des liens pour s'adapter aux petits écrans */
+  #navbar ul li a {
+    font-size: 39px;
+  }
+
+  /* Réduire l'image de profil pour les smartphones */
+  #ImgProfile {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    margin: auto;
+    padding-top: 5%;
+}
+
+  /* Réduire les liens de déconnexion et d'inscription */
+  .logout-link, .register-link {
+    font-size: 12px;
+    margin-left: 5px;
+  }
+
+  #menu-icon {
+    font-size: 40px;
+    padding: 15px;
+    position: fixed;
+    top: 90%;
+    bottom: auto;
+    left: 80%;
+  }
+
+  .dropdown-content a {
+    color: var(--black-color);
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+
+/* Menu déroulant pour l'utilisateur */
+.user-dropdown {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: inline-block;
+  z-index: 1000;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+}
+
+.user-dropdown:hover {
+    background-color: #f0f0f0;
+}
+
+.user-dropdown a {
+    color: #333;
+    padding: 10px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.user-dropdown a:hover {
+    background-color: #ddd;
+}
+
+.user-dropdown:hover .dropdown-content {
+  display: block;
+}
+}
+
+/* Cacher les liens utilisateur spécifiques au mobile dans le menu de gauche sur les écrans plus grands */
+.mobile-only {
+  display: none;
+}
+
+/* Afficher les liens utilisateur spécifiques au mobile dans le menu de gauche uniquement sur les smartphones */
+@media (max-width: 850px) {
+  .mobile-only {
+      display: block;
+  }
+}
+
+
+
+/* Liens de déconnexion et d'inscription */
+.logout-link, .register-link {
+  float: right;
+  margin-left: 10px;
+  color: var(--grey-color);
+  text-decoration: none;
+  transition: color var(--transition-speed);
+}
+
+.logout-link:hover, .register-link:hover {
+  color: var(--darkred-color);
+}
+
+
+/* Titres de la page */
+h1, h2 {
+  margin-top: 5%;
+  color: var(--black-color);
+  text-align: center;
+  text-shadow: 2px 2px 4px var(--grey-color); /* Effet d'ombre pour plus de profondeur */
+}
+
+h1 { font-size: 42px; }
+h2 { font-size: 22px; }
+
+/* Paragraphe standard */
+p {
+  margin-bottom: 0;
+  color: var(--black-color);
+  font-size: 16px;
+  text-align: center;
+}
+
+/* Liens généraux de la page avec un effet Neumorphisme */
+
+/* TOPIC PARTIE */
+
+a {
+  color: var( --black-color ); /* Utilisez une variable, ou à défaut, une couleur bleue standard */
+  cursor: pointer;
+  text-decoration: none;  /* Supprimer le soulignement par défaut pour un look plus moderne */
+  transition: color 0.3s ease; /* Animation fluide lors du changement de couleur */
+}
+
+a:hover, a:focus {
+  color: var( --darkred-color ); /* Une couleur bleue légèrement plus foncée pour le survol et le focus */
+  text-decoration: underline;  /* Soulignez au survol pour indiquer qu'il s'agit d'un lien cliquable */
+}
+
+a:active {
+  color: var( --black-color );
+}
+
+#neumorphic-container {
+  background-color: var(--background-color);
+  padding: 2% 5%;
+}
+
+.page-title, .page-subtitle {
+  margin-top: 5%;
+  color: var(--black-color);
+  text-align: center;
+  text-shadow: 2px 2px 4px var(--grey-color);
+}
+
+.page-title { font-size: 42px; }
+.page-subtitle { font-size: 22px; }
+
+p, .topic-title, .topic-author, .no-topic, .login-prompt {
+  margin-bottom: 1em;
+  color: var(--black-color);
+  text-align: center;
+}
+
+.neumorphism-card {
+  background-color: var(--white-color);
+  border-radius: 10px;
+  padding: 2% 4%;
+  margin-bottom: 2em;
+  box-shadow: var(--card-shadow-neumorphism);
+}
+
+.neumorphism-btn {
+  display: inline-block;
+  padding: 0.5em 1em;
+  border-radius: 8px;
+  background-color: var(--background-color);
+  border: none;
+  cursor: pointer;
+  box-shadow: var(--btn-shadow-neumorphism);
+  transition: var(--transition-speed);
+}
+
+.neumorphism-btn:hover {
+  text-decoration: none;
+}
+
+.neumorphism-btn:active {
+  transform: translateY(2px); 
+  box-shadow: inset 6px 6px 10px 0 rgba(0, 0, 0, 0.2), inset -6px -6px 10px 0 rgba(255, 255, 255, 0.5);
+}
+
+.auth-links {
+  list-style-type: none;
+  padding: 0;
+  text-align: center;
+}
+
+.auth-links li {
+  margin-bottom: 1em;
+}
+
+.divider {
+  margin: 3em 0;
+  border-color: var(--grey-color);
+}
+
+/* Survol : Effet d'enfoncement avec ombre interne */
+.topic-link:hover, a:hover {
+  box-shadow: var(--box-shadow-inset-neumorphism);
+}
+
+/* élément est actif ou reçoit le focus */
+.topic-link:focus, a:focus {
+  outline: none;
+  box-shadow: var(--box-shadow-inset-neumorphism); /* Effet d'enfoncement lors du focus */
+}
+
+/* clique sur l'élément : renforce l'effet d'enfoncement */
+.topic-link:active, a:active {
+  transform: translateY(2px); 
+  box-shadow: inset 6px 6px 10px 0 rgba(0, 0, 0, 0.2), inset -6px -6px 10px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* FENETRE MODALE */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: var(--background-color); 
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid var(--black-color);
+  width: 50%;
+  text-align: center;
+  border-radius: 5px;
+  /* Style Neumorphique ajouté pour la fenêtre modale */
+  box-shadow: 10px 10px 15px #d1cdc7, -10px -10px 15px #ffffff;
+  color: var(--primary-color);
+}
+
+.close {
+  color: var(--black-color);
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  transition: font-size 0.3s;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+  color: var(--primary-color);
+  font-size: 32px;
+  text-decoration: none;
+}
+
+/* BOUTONS */
+
+.button, .login-button, .register-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: var(--background-color);
+  color: var(--black-color);
+  text-decoration: none;
+  border-radius: 42px;
+  box-shadow: var(--box-shadow-neumorphism); /* Ombre Neumorphisme */
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.button:hover, .login-button:hover, .register-button:hover {
+  box-shadow: var(--box-shadow-inset-neumorphism);
+}
+
+.button:active, .login-button:active, .register-button:active {
+  transform: translateY(2px);
+  box-shadow: inset 6px 6px 10px 0 rgba(0, 0, 0, 0.2), inset -6px -6px 10px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* DEBUT DES CARD */
+.card-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.card {
+  background-color: var(--background-color);
+  padding: 20px;
+  border-radius: 8px;
+  /* Style Neumorphique standard pour les cards */
+  box-shadow: 10px 10px 15px #d1cdc7, -10px -10px 15px #ffffff;
+  width: fit-content;
+  margin: auto;
+  margin-top: 5%;
+  margin-bottom: 5%;
+  color: var(--black-color);
+}
+
+.card h1 {
+  color: var(--black-color);
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.card select,
+.card input[type="text"],
+.card input[type="submit"] {
+  width: 98%;
+  padding: 10px;
+  border-radius: 4px;
+  border: none;
+  background-color: var(--background-color);
+  color: var(--black-color);
+  margin-bottom: 10px;
+  /* Style Neumorphique pour les inputs */
+  box-shadow: inset 4px 4px 6px #d1cdc7, inset -4px -4px 6px #ffffff;
+  margin-left: -2%;
+}
+
+.card label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: var(--black-color);
+}
+
+.card input[type="submit"] {
+  background-color: var(--darkred-color);
+  color: var(--white-color);
+  cursor: pointer;
+  box-shadow: 4px 4px 6px #d1cdc7, -4px -4px 6px #ffffff;
+}
+
+.alert-card {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  background: var(--background-color);
+  padding: 20px;
+  border: 1px solid var(--black-color);
+  border-radius: 10px;
+  /* Style Neumorphique standard pour les alert-cards */
+  box-shadow: 10px 10px 15px #d1cdc7, -10px -10px 15px #ffffff;
+}
+
+/* FIN DES CARD */
+body.darken {
+  background-color: var(--black-color);
+}
+
+/* DEBUT DES CARDS MESSAGES CTS */
+
+/* Styles de card */
+.card-messageCTS {
+  background-color: var(--background-color);
+  border-radius: 15px; /* Bordures arrondies */
+  box-shadow: var(--card-shadow-neumorphism); /* Ombres extérieures */
+  overflow: hidden; /* Pour garantir que le contenu ne dépasse pas */
+  margin: 2em 0; /* Espace entre les cards */
+  transition: var(--transition-speed); /* Transition pour l'effet de survol */
+  padding: 1.5em; /* Augmenter l'espace intérieur */
+  font-family: 'Arial', sans-serif; /* Police de caractères pour une meilleure lisibilité */
+}
+
+.card-messageCTS:hover {
+  box-shadow: var(--card-shadow-inset-neumorphism); /* Ombre interne au survol */
+}
+
+.card-body-messageCTS h3 {
+  font-size: 1.5em; /* Augmenter la taille du titre */
+  margin-bottom: 1em; /* Espacer les éléments */
+}
+
+.priority-badge {
+  background-color: var(--background-color);
+  padding: 0.3em 0.7em;
+  border-radius: 5px;
+  font-weight: bold;
+  box-shadow: var(--btn-shadow-neumorphism);
+}
+
+/* Style pour la card avec priorité "Urgent" */
+.urgent-card .priority-badge {
+  background-color: var(--red-color);
+  color: var(--white-color);
+}
+
+.card-messageCTS p {
+  margin-bottom: 0.5em; /* Espacer les paragraphes */
+  font-size: 1.2em; /* Augmenter la taille du texte */
+}
+
+/* FIN DES CARDS MESSAGES CTS */
+
+/* BOUTON SUPPRIMER */
+
+.btn-delete {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 10px 20px;
+  background-color: var(--red-color);
+  color: var(--white-color);
+  text-decoration: none;
+  border-radius: 8px;
+  /* Ombres Neumorphiques */
+  box-shadow: 4px 4px 6px #d1cdc7, 2px -4px 5px #ffffff;
+  transition: background-color 0.3s, transform 0.2s; /* Ajout d'une transition pour l'effet d'enfoncement */
+}
+
+.btn-delete:hover {
+  background-color: var(--darkred-color);
+  color: var(--white-color);
+}
+
+.btn-delete:active {
+  background-color: var(--darkred-color);
+  /* Ombres internes pour un effet d'enfoncement Neumorphique plus prononcé */
+  box-shadow: inset 4px 4px 6px rgba(0, 0, 0, 0.2), inset -4px -4px 6px rgba(255, 255, 255, 0.8);
+}
+
+
+#ImgProfileMess {
+  width: 40px; /* ou la dimension que vous voulez */
+  height: 40px;
+  border-radius: 50%; /* ceci crée le cercle */
+  object-fit: cover; /* pour s'assurer que l'image couvre tout l'espace */
+  overflow: hidden; /* au cas où l'image serait plus grande que les dimensions définies */
+}
+
+/* TEXTAREA MESSAGE FORUM */
+
+.form-chat {
+  position: relative;
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 25px;
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(15px);
+  /* Ombres douces Neumorphiques */
+  box-shadow: 8px 8px 12px #d1cdc7, -8px -8px 12px #ffffff; 
+  transition: box-shadow 0.3s;
+}
+
+.form-chat:hover {
+  box-shadow: 10px 10px 15px #d1cdc7, -10px -10px 15px #ffffff;
+}
+
+textarea#post_text {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 12px 52px 12px 17px;
+  font-size: 16px;
+  font-family: 'Arial', sans-serif;
+  line-height: 1.5;
+  border: none;
+  border-radius: 16px;
+  outline: none;
+  resize: vertical;
+  background-color: rgba(255, 255, 255, 0.08);
+  /* Ombres internes pour un effet d'indentation Neumorphique */
+  box-shadow: inset 4px 4px 6px #d1cdc7, inset -4px -4px 6px #ffffff;
+  transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+}
+
+textarea#post_text:focus {
+  box-shadow: inset 6px 6px 8px #d1cdc7, inset -6px -6px 8px #ffffff;
+}
+
+@media (max-width: 480px) {
+  textarea#post_text {
+      font-size: 14px;
+      padding: 8px 40px 8px 12px;
+  }
+}
+
+textarea#post_text::placeholder {
+  color: var(--primary-color-lighter);
+  transition: color 0.2s;
+}
+
+textarea#post_text:focus::placeholder {
+  color: var(--secondary-color);
+  opacity: 0.5;
+}
+
+@keyframes btnPulse {
+  0% { transform: translateY(-50%) scale(1); }
+  50% { transform: translateY(-50%) scale(1.05); }
+  100% { transform: translateY(-50%) scale(1); }
+}
+
+/* Style du bouton */
+.btn.btn-primary {
+  background-color: var(--background-color);
+  border: none;
+  border-radius : 8px;
+  padding: 10px 20px;
+  font-size: 16px;
+  color: var(--black-color);
+  cursor: pointer;
+  transition: all var(--transition-speed);
+  box-shadow: var(--btn-shadow-neumorphism);
+  display: block;
+  text-align: center;
+}
+
+.btn.btn-primary:after {
+  content: '→';
+  display: inline-block;
+  margin-left: 8px; /* Ajout d'un espace entre le texte du bouton et l'icône */
+  transition: transform var(--transition-speed);
+}
+
+.btn.btn-primary:hover {
+  box-shadow: var(--btn-shadow-inset-neumorphism);
+}
+
+.btn.btn-primary:hover:after {
+  transform: translateX(8px);
+}
+
+/* Boutons qui merdent acount */
+#btnRenewSubscription,
+#btnEditPersonalInfo,
+#btnEditPassword,
+#btnDeleteAccount,
+[id^="btnPremiumSubscription_"] {
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+
+#form_submit {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+
+/* Pop-up MARKER perso */
+
+.leaflet-popup-content-wrapper {
+  position: relative;
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 25px;
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(15px); /* Effet flou pour ajouter de la profondeur */
+  
+  /* Ombres douces Neumorphiques */
+  box-shadow: 8px 8px 12px #d1cdc7, -8px -8px 12px #ffffff;
+  transition: box-shadow 0.3s;
+}
+
+.leaflet-popup-content-wrapper:hover {
+  box-shadow: 5px 5px 8px rgba(209, 205, 199, 0.5), -5px -5px 8px rgba(255, 255, 255, 0.5);
+}
+
+
+/* Routing machine */
+
+
+/* TEXTAREA Marker perso */
+
+input[type="text"]#text {
+  /* Configuration générale */
+  box-sizing: border-box;
+  width: 100%;
+  padding: 12px 52px 12px 17px;
+  font-size: 16px;
+  font-family: 'Arial', sans-serif;
+  line-height: 1.5;
+  border-radius: 16px;
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.08);
+  
+  /* Ombres Neumorphiques */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), inset 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+}
+
+input[type="text"]#text:focus {
+  /* Augmente l'ombre lors de la mise au point pour un effet d'enfoncement */
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2), inset 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 480px) {
+  /* Adaptation sur les petits écrans */
+  input[type="text"]#text {
+      font-size: 16px;
+      padding: 8px 40px 8px 12px;
+  }
+}
+
+/* Placeholder */
+input[type="text"]#text::placeholder {
+  color: var(--primary-color-lighter);
+  transition: color 0.2s;
+}
+
+input[type="text"]#text:focus::placeholder {
+  color: var(--secondary-color);
+  opacity: 0.5;
+}
+
+/* Bouton Submit stylisé */
+input[type="submit"] {
+  /* Apparence générale du bouton */
+  background-color: transparent; 
+  border: 2px solid var(--primary-color);
+  border-radius: 4px;
+  padding: 8px 20px 8px 30px;
+  color: var(--primary-color);
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s;
+
+  /* Effet neumorphique pour le bouton */
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1), -3px -3px 10px rgba(255, 255, 255, 0.7);
+}
+
+/* Coche avant le bouton pour indiquer l'action de validation */
+input[type="submit"]::before {
+  content: '✓';
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  color: var(--primary-color);
+  transition: transform 0.3s;
+}
+
+input[type="submit"]:hover {
+  /* Style au survol */
+  background-color: var(--primary-color);
+  color: var(--darkred-color);
+  border-color: var(--primary-color);
+  
+  /* Effet d'enfoncement au survol */
+  box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.2), inset -4px -4px 8px rgba(255, 255, 255, 0.9);
+}
+
+input[type="submit"]:hover::before {
+  color: white;
+}
+
+/* Bouton close */
+.leaflet-popup-close-button {
+  /* Apparence générale */
+  background-color: transparent;
+  border: 2px solid var(--primary-color);
+  border-radius: 4px;
+  padding: 8px 12px;
+  color: var(--primary-color);
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s;
+
+  /* Ombres Neumorphiques */
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1), -3px -3px 10px rgba(255, 255, 255, 0.7);
+  margin-top: 15px;
+}
+
+.leaflet-popup-close-button:hover {
+  /* Style au survol */
+  background-color: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+  
+  /* Effet d'enfoncement */
+  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1), inset -2px -2px 5px var(--primary-color);
+}
+
+.leaflet-popup-close-button span {
+  display: inline-block;
+  vertical-align: middle;
+  line-height: normal;
+  color: inherit;
+}
+
+.leaflet-popup-close-button:hover span[aria-hidden="true"] {
+  /* Style au survol */
+  background-color: var(--primary-color);
+  color: var(--darkred-color);
+  border-color: var(--primary-color);
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+  position: absolute;
+  top: 30%  !important;
+  right: 0;
+  border: none;
+  text-align: center;
+  width: 1% !important; 
+  height: 20px;
+  font: 20px/5px Tahoma, Verdana, sans-serif;
+  color: #757575;
+  text-decoration: none;
+  background: transparent;
+}
+
+.leaflet-container a.leaflet-popup-close-button:hover {
+  /* Effet d'enfoncement au survol */
+  box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.2), inset -4px -4px 8px rgba(255, 255, 255, 0.9);
+}
+
+.leaflet-popup-close-button span[aria-hidden="true"] {
+  color: var(--primary-color);
+}
+
+/* cache les boutons de zoom  */
+.leaflet-control-zoom.leaflet-bar.leaflet-control {
+  display: none;
+}
+
+
+/* FOOTER */
+/* Style général du footer */
+
+/* Généralités du footer */
+.footer {
+  background-color: var(--background-color);
+  padding: 60px 0;
+  font-size: 15px;
+  box-shadow: var(--shadow-light), var(--shadow-dark);
+  border-radius: 20px;
+}
+
+.parallax-footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 30px;
+  padding: 0 15px;
+}
+
+.footer-column {
+  background: var(--background-color);
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: var(--card-shadow-neumorphism);
+  flex: 1;
+}
+
+.footer-column h5 {
+  font-size: 20px;
+  color: var(--black-color);
+  margin-bottom: 25px;
+  position: relative;
+}
+
+.footer-column h5:after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 50px;
+  height: 4px;
+  background-color: var(--red-color);
+}
+
+/* Liens rapides */
+.quick-links, .social-icons {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.quick-links li, .social-icons li {
+  margin-bottom: 15px;
+}
+
+.quick-links a, .social-icons a {
+  color: var(--black-color);
+  text-decoration: none;
+  transition: color var(--transition-speed);
+  position: relative;
+  padding-left: 25px;
+}
+
+.quick-links a:before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--red-color);
+}
+
+.quick-links a:hover, .social-icons a:hover {
+  color: var(--black-color);
+  font-weight: 600;
+}
+
+/* Icônes des réseaux sociaux */
+
+@media (max-width: 850px) {
+  .footer-column {
+      width: 100%;
+      background: var(--background-color);
+      padding: 1%;
+      margin: 1%;
+      border-radius: 15px;
+      box-shadow: var(--card-shadow-neumorphism);
+      flex: 1;
+  }
+  
+  /* Pour agencer les icônes des réseaux sociaux deux à deux */
+  .social-icons li {
+      float: left;
+      width: 50%;
+      box-sizing: border-box;
+  }
+
+  /* Réinitialiser le flottement après les icônes */
+  .social-icons:after {
+      content: "";
+      display: table;
+      clear: both;
+  }
+}
+
+
+/* Styles pour le formulaire de contact */
+.card-form-footer form {
+  display: grid;
+  gap: 20px;
+}
+
+.card-form-footer label {
+  font-size: 14px;
+  color: var(--black-color);
+  margin-bottom: 10px;
+  display: block;
+}
+
+.card-form-footer input[type="text"],
+.card-form-footer input[type="email"],
+.card-form-footer input[type="tel"],
+.card-form-footer textarea {
+  box-sizing: border-box;
+  padding: 15px;
+  margin: 1%;
+  width: 97%;
+  border: none;
+  background: var(--background-color);
+  box-shadow: var(--btn-shadow-neumorphism);
+  border-radius: 10px;
+  font-size: 14px;
+  color: var(--black-color);
+  outline: none;
+  transition: box-shadow var(--transition-speed);
+}
+
+.card-form-footer input[type="text"]:focus,
+.card-form-footer input[type="email"]:focus,
+.card-form-footer input[type="tel"]:focus,
+.card-form-footer textarea:focus {
+  box-shadow: var(--btn-shadow-inset-neumorphism);
+}
+
+.card-form-footer textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.card-form-footer button {
+  background: var(--red-color);
+  color: var(--white-color);
+  border: none;
+  padding: 15px 25px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.1);
+  transition: background-color var(--transition-speed), transform var(--transition-speed);
+}
+
+.card-form-footer button:hover {
+  background: var(--darkred-color);
+  transform: translateY(-2px);
+}
+
+
+/* FIN DU FOOTER */
+/* Début DU FOOTER -850 */
+
+@media (max-width: 850px) {
+  
+  .parallax-footer-content {
+    flex-direction: column;
+    gap: 15px; /* Ajustez le gap pour qu'il soit adapté aux écrans plus petits */
+  }
+
+  .footer-column {
+    /* Si vous voulez que chaque carte prenne la pleine largeur de l'écran, définissez width à 100%. Sinon, ajustez en conséquence. */
+    width: 100%;
+    background: var(--background-color);
+    padding: 0px;
+    border-radius: 15px;
+    box-shadow: var(--card-shadow-neumorphism);
+    flex: 1;
+  }
+
+  /* Icônes des réseaux sociaux */
+  .social-icons li {
+    /* Cela permettra aux icônes de s'étaler en colonne plutôt qu'en ligne */
+    display: block;
+    margin-right: 0; 
+    margin-bottom: 10%;
+  }
+
+}
+
+
+
+/* FIN DU FOOTER -850*/
+
+
+
+
+
+
+
+
+
+
+/* Card Menu */
+.card-menu {
+  /* Fond, ombre et couleurs de base */
+  background-color: var(--white-color);
+  box-shadow: var(--card-shadow-neumorphism);
+  color: var(--black-color);
+  padding: 0;
+  transition: transform 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
+  
+  /* Positionnement et dimensions */
+  margin: 5% auto 10%;
+  position: relative; /* Important pour positionner l'image par rapport à cette carte */
+  perspective: 1000px;
+  height: 200px;
+  transform-style: preserve-3d;
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+  z-index: 1;
+  width: 100%;
+  max-width: 400px;
+  /* Forme */
+  border-radius: 8px;
+  overflow: visible; /* Permet à l'image de dépasser */
+}
+
+.card-menu p {
+  color: var(--black-color);
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.card-menu:hover {
+  transform: translateZ(130px) scale(1.05);
+  box-shadow: 4px 4px 6px #bcbcbc, -4px -4px 6px #ffffff;
+  z-index: 3;
+}
+
+.card-menu img {
+  position: absolute; /* Positionnement absolu pour positionner l'image par rapport à la carte */
+  bottom: -30%; 
+  left: 50%; /* Pour centrer l'image horizontalement */
+  transform: translateX(-50%); /* Décaler l'image pour la centrer correctement */
+  z-index: 2;
+  width: 48%; /* Diminuer la taille de l'image */
+  object-fit: cover;
+  filter: drop-shadow(0 20px 100px rgb(0, 0, 0));
+  border-radius: 5px;
+}
+
+/* carte r */
+.card-face[data-card="network"] {
+  height: 200px; 
+  width: 100%;
+  border-radius: 8px;
+  background-image: url('/cartereso.webp');
+  background-size: cover; 
+  background-repeat: no-repeat;
+  background-position: center; 
+  overflow: hidden;
+}
+
+.card-face[data-card="help"] {
+  height: 200px; 
+  width: 100%;
+  border-radius: 8px;
+  background-image: url('/Logo Ligne/2.webp'); /* Assurez-vous que le chemin est correct par rapport à votre dossier CSS */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center 20% !important;
+  overflow: hidden;
+}
+
+.card-face[data-card="forum"] {
+  height: 200px; 
+  width: 100%;
+  border-radius: 8px;
+  background-image: url('\strasbourg_1644_merian.webp'); 
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  overflow: hidden;
+}
+
+.card-face[data-card="messagesCTS"] {
+  height: 200px; 
+  width: 100%;
+  border-radius: 8px;
+  background-image: url('\inforeso.webp'); 
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  overflow: hidden;
+}
+
+.card-face[data-card="tarifsCTS"] {
+  height: 200px; 
+  width: 100%;
+  border-radius: 8px;
+  background-image: url('\ticket.webp'); 
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  overflow: hidden;
+}
+
+/* CARD CATEGORIE */
+
+.card-face[data-card="Bus"] {
+  height: 200px; 
+  width: 100%;
+  border-radius: 8px;
+  background-image: url('/44080662_1881085461986769_6668733005386743808_n.webp'); 
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center 20% !important;
+  overflow: hidden;
+}
+
+.card-face[data-card="general"] {
+  height: 200px; 
+  width: 100%;
+  border-radius: 8px;
+  background-image: url('/postaleStrasbourg.webp'); 
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center 20% !important;
+  overflow: hidden;
+}
+
+.card-face[data-card="A"] {
+  height: 200px; 
+  width: 100%;
+  border-radius: 8px;
+  background-image: url('/Logo Ligne/A.webp'); 
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center 20% !important;
+  overflow: hidden;
+}
+
+.card-face[data-card="B"] {
+  height: 200px; 
+  width: 100%;
+  border-radius: 8px;
+  background-image: url('/Logo Ligne/B.webp'); 
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center 20% !important;
+  overflow: hidden;
+}
+
+.card-face[data-card="C"] {
+  height: 200px; 
+  width: 100%;
+  border-radius: 8px;
+  background-image: url('/Logo Ligne/C.webp'); 
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center 20% !important;
+  overflow: hidden;
+}
+
+.card-face[data-card="D"] {
+  height: 200px; 
+  width: 100%;
+  border-radius: 8px;
+  background-image: url('/Logo Ligne/D.webp'); 
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center 20% !important;
+  overflow: hidden;
+}
+
+.card-face[data-card="E"] {
+  height: 200px; 
+  width: 100%;
+  border-radius: 8px;
+  background-image: url('/Logo Ligne/E.webp'); 
+
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center 20% !important;
+  overflow: hidden;
+}
+
+
+.card-face[data-card="F"] {
+  height: 200px; 
+  width: 100%;
+  border-radius: 8px;
+  background-image: url('/Logo Ligne/F.webp'); 
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center 20% !important;
+  overflow: hidden;
+}
+
+.tcardCat {
+  color: white;
+  font-size: 72px;
+  text-align: center;
+  text-shadow: none;
+  margin-top: 11%;
+  text-decoration : none !important;
+}
+
+.card-wrapper {
+  /* Grid pour afficher les cartes en deux colonnes */
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 0;
+  margin: 0 10%;
+}
+
+.card-wrapper > .card:nth-child(5) {
+  grid-column: 1 / span 2;
+  justify-self: center;
+}
+
+/* Adaptations pour petits écrans */
+@media screen and (max-width: 768px) {
+  .card-menu {
+      width: 90%;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .card-wrapper {
+      grid-template-columns: 1fr; /* Une seule colonne pour écrans plus petits */
+  }
+}
+
+/* Messages Post du Forum */
+
+.chat-page {
+  margin-top: 8% !important;
+  max-width: 90%;
+  margin: 0 auto;
+  background-color: transparent;
+  border: 1px solid var(--white-color);
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.chat-window {
+  border: 2px solid #c7353a41;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.chat-messages {
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.238); 
+  backdrop-filter: blur(10px); 
+}
+
+.chat-message {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  position: relative; /* Ajouté pour le positionnement du bouton de suppression */
+}
+
+.incoming {
+  align-items: flex-end;
+}
+
+/* Couleur de fond pour les messages sortants */
+.chat-message.outgoing .message-bubble {
+  background: var(--darkred-color);
+}
+
+/* Couleur de texte pour le nom d'utilisateur dans les messages sortants */
+.chat-message.outgoing .username {
+  color: var(--white-color);
+}
+
+/* Couleur de texte pour le contenu du message et la date dans les messages sortants */
+.chat-message.outgoing .message-text, 
+.chat-message.outgoing .message-date {
+  color: var(--white-color);
+}
+
+.message-bubble {
+  padding: 10px;
+  border-radius: 20px;
+  background-color: var(--primary-color);
+  box-shadow: var(--box-shadow);
+  max-width: 70%;
+  word-wrap: break-word;
+  position: relative; /* Positionnement par rapport aux éléments enfants comme le bouton de suppression */
+  
+  /* Nouveaux styles ajoutés */
+  background-color: rgba(255, 255, 255, 0.05); /* Un fond subtil pour le conteneur du message */
+  backdrop-filter: blur(10px); /* Flou subtil pour le fond */
+  transition: transform 0.2s, box-shadow 0.2s; /* Transition pour les animations */
+  
+  /* Pour un effet hover subtil */
+  &:hover {
+    transform: translateY(-3px); /* Léger déplacement vers le haut */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Shadow plus profond pour donner une sensation de "lift" */
+  }
+}
+
+.incoming .message-bubble {
+  background-color: var(--primary-color-lighter);
+}
+
+p.message-text {
+  color: var(--black-color);
+  margin: 0;
+  text-align: left;
+}
+
+.username {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.message-date {
+  font-size: 12px;
+  color: var(--accent-color);
+}
+
+/* Position du bouton "X" à l'intérieur de la bulle */
+.message-actions .btn.btn-delete {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px; /* Espacement entre le texte et l'icône */
+  background-color: var(--red-color); /* Fond rouge transparent */
+  border: 1px solid var(--darkred-color); /* Bordure rouge transparente */
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  transition: all 0.3s;
+  text-decoration: none;
+  box-shadow: var(--box-shadow);
+}
+
+.message-actions .btn.btn-delete::before {
+  color: var(--darkred-color);
+}
+
+.message-actions .btn.btn-delete:hover {
+  background-color: rgba(255, 0, 0, 0.3);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.message-actions .btn.btn-delete i {
+  font-size: 14px; /* Taille de l'icône */
+}
+
+.message-actions .btn.btn-delete:before {
+  content: "\f1f8"; /* Icône de corbeille FontAwesome */
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+}
+
+@keyframes breathe {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.message-actions .btn.btn-delete {
+  animation: breathe 3s infinite;
+}
+
+
+/* Chat input styling */
+
+.chat-input {
+  padding: 20px;
+  border-top: 1px solid var(--accent-color);
+}
+
+.form-chat {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Position du bouton "X" à gauche et à l'intérieur de la bulle */
+.message-actions .btn.btn-delete {
+  position: absolute;
+  bottom: -24px;
+  left: -40px; /* Pour le décaler à gauche de la bulle */
+  background-color: rgba(255, 0, 0, 0);
+  border: none;
+  border-radius: 100%;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 20px;
+  color: var(--black-color);
+  font-size: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.3s;
+  z-index: 2; /* Pour s'assurer qu'il se trouve au-dessus des autres éléments si nécessaire */
+}
+
+.message-actions .btn.btn-delete:hover {
+  background-color: var(--darkred-color);
+}
+
+/* Ajustement pour les messages entrants */
+.incoming .message-actions .btn.btn-delete {
+  right: -25px;
+  left: auto;
+}
+
+
+@media screen and (max-width: 850px) {
+  .chat-page {
+    padding: 10px;
+  }
+
+  .chat-window {
+    padding: 10px;
+  }
+}
+
+/* PAGE DE CONNEXION */
+
+.custom-login-form {
+  display: flex;
+  flex-direction: column;
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: var(--background-color);
+  box-shadow: var(--shadow-light), var(--shadow-dark);
+  width: 99%;
+}
+
+.custom-login-title {
+  color: var(--black-color);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.custom-login-input {
+  padding: 10px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 10px;
+  background-color: #f1f1f1;
+  box-shadow: var(--box-shadow-inset-neumorphism);
+  transition: all var(--transition-speed);
+  width: 95%;
+}
+
+.custom-login-input:focus {
+  outline: none;
+  box-shadow: inset 6px 6px 12px #bcbcbc, inset -6px -6px 12px #ffffff;
+}
+
+.custom-login-button {
+  margin-top: 20px;
+  padding: 10px 15px;
+  color: var(--white-color);
+  border: none;
+  border-radius: 10px;
+  background-color: var(--background-color);
+  box-shadow: var(--shadow-light), var(--shadow-dark);
+  transition: all var(--transition-speed);
+  cursor: pointer;
+}
+
+.custom-login-button:hover {
+  background-color: var(--grey-color);
+  box-shadow: inset 4px 4px 8px #aea8a8, inset -4px -4px 8px #ffffff;
+}
+
+.custom-alert {
+  margin-bottom: 20px;
+  padding: 10px;
+  border-radius: 10px;
+  color: var(--black-color);
+  background-color: var(--red-color);
+  text-align: center;
+  box-shadow: var(--shadow-light), var(--shadow-dark);
+}
+
+.custom-login-info {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* CARTE GOOGLE MAP */
+
+iframe {
+  width: 100%;
+  height: 350px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+}
+
+/* CARD ALERTE */
+
+/* Effet d'overlay lorsque l'alerte est affichée */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9997; /* Assure qu'il est en-dessous de la carte mais au-dessus des autres éléments */
+  background: rgba(0, 0, 0, 0.75); /* Noir semi-transparent */
+  backdrop-filter: blur(5px); /* Floute le contenu en dessous */
+}
+
+.overlay, .card-alerte {
+  display: none;
+}
+
+
+.card-alerte {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 400px;
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 9998; /* Assure que l'alerte est au-dessus */
+  
+  /* Couleurs et styles pour le néomorphisme */
+  background-color: var(--background-color); 
+  color: var(--black-color);
+  
+  /* Ombres pour l'effet néomorphisme */
+  box-shadow: 8px 8px 16px #aea8a8, -8px -8px 16px #ffffff; 
+  text-align: center;
+}
+
+.card-alerte strong {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+
+/* Liste des Alertes */
+
+.alerte-container {
+  background-color: var(--background-color);
+}
+
+.alerte-card {
+  background-color: var(--background-color);
+  border-radius: 10px;
+  box-shadow: var(--card-shadow-neumorphism);
+  transition: var(--transition-speed);
+}
+
+.alerte-card:hover {
+  box-shadow: var(--card-shadow-inset-neumorphism);
+}
+
+.alerte-card-header {
+  background-color: var(--red-color);
+  color: var(--white-color);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  padding-left: 5%;
+}
+
+.alerte-card-text {
+  color: var(--black-color);
+}
+
+.alerte-card-text strong {
+  color: var(--black-color);
+}
+
+.alerte-link {
+  font-size: 1.2rem;
+  padding: 1rem;
+  border: none;
+  border-radius: 1rem;
+  background-color: var(--background-color);
+  width: 300px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  box-shadow: var(--btn-shadow-neumorphism);
+  transition: var(--transition-speed);
+  color: var(--black-color);
+}
+
+.alerte-link:hover {
+  outline: none;
+  box-shadow: var(--btn-shadow-inset-neumorphism);
+}
+
+.alerte-user-image {
+  border-radius: 50%; /* Pour rendre l'image circulaire */
+  box-shadow: var(--card-shadow-neumorphism);
+  transition: var(--transition-speed);
+  border: 2px solid var(--background-color); /* Pour éviter que les ombres ne coupent l'image */
+  overflow: hidden; /* Important pour le border-radius avec l'image */
+  width: 250px; /* Ajustez la taille selon vos besoins */
+  height: 250px; /* Assurez-vous que la hauteur soit la même que la largeur pour maintenir l'image circulaire */
+}
+
+.alerte-user-image:hover {
+  box-shadow: var(--card-shadow-inset-neumorphism);
+}
+
+/* Style pour Outil Statistique Alertes */
+
+/* Conteneur pour centrer */
+
+.content-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centrer verticalement */
+  align-items: center;     /* Centrer horizontalement */
+  min-height: calc(100vh - (/* hauteur de votre header */ + /* hauteur de votre footer */));
+  padding: 1rem;
+}
+
+.center-wrapper {
+  width: 100%;
+  max-width: 90%;
+  text-align: center; 
+}
+
+#ligneSelect {
+  outline: none;
+  font-size: 1.2rem;
+  padding: 1rem;
+  border: none;
+  border-radius: 1rem;
+  background-color: var(--background-color);
+  width: 300px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  box-shadow: var(--btn-shadow-neumorphism);
+  transition: var(--transition-speed);
+  color: var(--black-color);
+  text-align: center;
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#ligneSelect:focus {
+  outline: none;
+  box-shadow: var(--btn-shadow-inset-neumorphism);
+}
+
+#ligneSelect option {
+  color: var(--black-color);
+  background-color: var(--background-color);
+}
+
+
+/* Leaflet */
+
+/* fait disparaitre la mention à leaflet en bas de la map */
+.leaflet-control-attribution {
+  display : none;
+} 
+
+/* Rejoute du texte explicatif pour l'itinéraire */
+.leaflet-routing-geocoder:nth-child(1)::before {
+  content: "Votre point de départ :";
+  display: block;
+  margin-bottom: 5px; /* ajustez cette valeur selon vos besoins */
+  font-weight: bold; /* met le texte en gras */
+}
+
+.leaflet-routing-geocoder:nth-child(2)::before {
+  content: "Votre point d'arrivée :";
+  display: block;
+  margin-bottom: 5px; /* ajustez cette valeur selon vos besoins */
+  font-weight: bold; /* met le texte en gras */
+}
+
+/* DEBUT DU SWITCH DARKMODE */
+
+/* Le conteneur du switch - positionne le label et l'input du switch */
+.form-switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Masque le input par défaut */
+.form-switch input {
+  display: none;
+}
+
+/* Le cercle glissant - avant le changement */
+.form-switch label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 52px;
+  height: 28px;
+  background-color: #ccc;
+  border-radius: 34px;
+  transition: .4s;
+  cursor: pointer;
+}
+
+/* Le cercle glissant - après le changement (lorsque l'utilisateur clique dessus) */
+.form-switch label:before {
+  content: "";
+  position: absolute;
+  height: 26px;
+  width: 26px;
+  left: 1px;
+  bottom: 1px;
+  background-color: white;
+  border-radius: 50%;
+  transition: .4s;
+}
+
+/* Si l'input est coché, cela modifie l'arrière-plan du label */
+input:checked + .form-check-label {
+  background-color: #2196F3;
+}
+
+/* Déplace le cercle glissant vers la droite quand il est coché */
+input:checked + .form-check-label:before {
+  transform: translateX(26px);
+}
+
+
+/* FIN DU SWITCH DARKMODE */
+
+
+
+/* social */
+
+.btn-social {
+  position: relative;
+  height: 100px; 
+  width: 100px; 
+  background: rgb(214, 214, 214);
+  border-radius: 40%;
+  box-shadow: -7px -7px 20px 0 rgba(255, 255, 255, 0.9),
+  7px 7px 20px 0 rgba(0, 0, 0, 0.3);
+  transition: 0.2s;
+}
+
+.btn-social i{
+  color: var(--black-color) !important;
+}
+
+.btn-social a {
+  padding: 30px;
+}
+
+.btn-social:hover {
+  transform: scale(1.1);
+}
+
+.btn-social::before {
+  content: "";
+  position: absolute;
+  height: 80%;
+  width: 80%;
+  background: rgb(214, 214, 214);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.btn-social:hover::before {
+  box-shadow: inset -7px -7px 20px 0 rgba(255, 255, 255, 1),
+  inset 7px 7px 20px 0 rgba(0, 0, 0, 0.3);
+}
+
+.btn-social i {
+  position: absolute;
+  color: rgb(73, 192, 192);
+  font-size: 35px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: 0.2s;
+}
+
+.btn-social:hover i {
+  font-size: 30px;
+  color : var(--darkred-color) !important;
+}
+
+.social-icons {
+  display: flex; /* Active Flexbox */
+  flex-wrap: wrap; /* Permet aux éléments d'aller à la ligne si l'espace est insuffisant */
+  align-items: center; /* Centre les boutons verticalement */
+  justify-content: space-around; /* Espacement autour de chaque bouton */
+  list-style: none; /* Enlève les puces de la liste */
+  padding: 40px; /* Enlève le padding de la liste */
+  margin: 0; /* Enlève la marge de la liste */
+}
+
+.social-icons a {
+  padding : 30px;
+}
+
+/* Modification pour les écrans de moins de 768px de large */
+@media (max-width: 1180px) {
+  .btn-social {
+      height: 80px;
+      width: 80px;
+  }
+  
+  .btn-social i {
+      font-size: 28px;
+  }
+  
+  .social-icons a {
+      padding: 20px;
+  }
+}
+
+/* Modification pour les écrans de moins de 480px de large */
+@media (max-width: 940px) {
+  .btn-social {
+      height: 60px;
+      width: 60px;
+  }
+  
+  .btn-social i {
+      font-size: 20px;
+  }
+  
+  .social-icons a {
+      padding: 25px;
+  }
+}

@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="card">
+        <h1>Demander de l'aide</h1>
+
+        <form id="alerte-form" method="post">
+            <label for="ligne">Ligne:</label><br>
+            <select id="ligne" name="ligne">
+                <option value="Ligne A">Ligne A : Illkirch-Graffenstaden - Parc des Sports</option>
+                <option value="Ligne B">Ligne B : Lingolsheim Tiergaertel - Hoenheim Gare</option>
+                <option value="Ligne C">Ligne C : Gare centrale - Neuhof Rodolphe Reuss</option>
+                <option value="Ligne D">Ligne D : Kehl Rathaus - Poteries</option>
+                <option value="Ligne E">Ligne E : Campus d'Illkirch - Robertsau L'Escale</option>
+                <option value="Ligne F">Ligne F : Comtes - Place d'Islande</option>
+            </select><br>
+
+            <label for="sens">Sens:</label><br>
+            <select id="sens" name="sens" disabled>
+                <option value="" selected disabled>Choisissez une ligne d'abord</option>
+            </select><br>
+
+            <input id="submitAlertButton" type="submit" value="Demander de l'aide" class="topic-link">
+        </form>
+    </div>
+
+    <script>
+        // Options spécifiques pour chaque ligne
+        var optionsParLigne = {
+            'Ligne A': ['Illkirch-Graffenstaden', 'Parc des Sports'],
+            'Ligne B': ['Lingolsheim Tiergaertel', 'Hoenheim Gare'],
+            'Ligne C': ['Gare centrale', 'Neuhof Rodolphe Reuss'],
+            'Ligne D': ['Kehl Rathaus', 'Poteries'],
+            'Ligne E': ['Campus d\'Illkirch', 'Robertsau L\'Escale'],
+            'Ligne F': ['Comtes', 'Place d\'Islande']
+        };
+
+        // Sélectionner la ligne et mettre à jour les options de sens
+        var ligneSelect = document.getElementById('ligne');
+        var sensSelect = document.getElementById('sens');
+
+        ligneSelect.addEventListener('change', function() {
+            var selectedLigne = ligneSelect.value;
+
+            // Vider les options de sens actuelles
+            sensSelect.innerHTML = '';
+
+            // Récupérer les options spécifiques pour la ligne sélectionnée
+            var sensOptions = optionsParLigne[selectedLigne] || [];
+
+            // Ajouter les options de sens à la liste déroulante
+            sensOptions.forEach(function(option) {
+                var optionElement = document.createElement('option');
+                optionElement.value = option;
+                optionElement.text = option;
+                sensSelect.appendChild(optionElement);
+            });
+
+            // Activer la liste déroulante des sens
+            sensSelect.disabled = false;
+        });
+    </script>
+{% endblock %}

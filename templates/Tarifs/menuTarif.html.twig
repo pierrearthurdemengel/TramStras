@@ -1,0 +1,119 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Découvrir nos offres{% endblock %}
+
+{% block body %}
+    <h1>Tickets ou abonnements ?</h1>
+    <p>Une gamme complète de tickets et abonnements vous permet de choisir le titre de transport qui conviendra le mieux à vos besoins de déplacement.</p>
+    <p>Les abonnements mensuels et annuels vous offrent le tarif le plus avantageux pour un nombre de voyages illimité. Ils nécessitent l'établissement préalable de la carte Badgéo.</p>
+
+
+<div class="card-wrapper">
+    <a href="https://www.cts-strasbourg.eu/fr/Titres-de-transport/tarifs/Tickets/" class="card-menu">
+        <div class="card-face front-face">
+            <div class="card-content">
+                <p>DÉCOUVRIR LA GAMME DE TICKETS</p>
+                <img class="card-image" id="MapPNG" src="/ticketCTS.webp" alt="Aperçu de la carte">
+            </div>
+        </div>
+        <div class="card-face back-face"></div>
+    </a>
+    <a href="https://www.cts-strasbourg.eu/fr/Titres-de-transport/tarifs/Abonnements/" class="card-menu">
+        <div class="card-face front-face">
+            <div class="card-content">
+                <p>DÉCOUVRIR LES ABONNEMENTS CTS</p>
+                <img class="card-image" id="AlertePNG" src="/Badgeo.webp" alt="Icone d'aide">
+            </div>
+        </div>
+        <div class="card-face back-face"></div>
+    </a>
+    <a href="https://abonnement-gratuit.cts-strasbourg.eu/" class="card-menu">
+        <div class="card-face front-face">
+            <div class="card-content">
+                <p>DÉCOUVRIR L'ABONNEMENT 4-17 ANS GRATUIT</p>
+                <img class="card-image" id="Forum" src="/logo-gratuite.webp" alt="Aperçu du Forum">
+            </div>
+        </div>
+        <div class="card-face back-face"></div>
+    </a>
+
+        <a href="https://www.cts-strasbourg.eu/fr/Titres-de-transport/tarifs/tarification-solidaire/" class="card-menu">
+        <div class="card-face front-face">
+            <div class="card-content">
+                <p>DÉCOUVRIR LA TARIFICATION SOLIDAIRE</p>
+                <img class="card-image" id="Forum" src="/TableauQF.webp" alt="Aperçu du Forum">
+            </div>
+        </div>
+        <div class="card-face back-face"></div>
+    </a>
+
+        <a href="https://www.passmobilite.eu/particuliers" class="card-menu">
+        <div class="card-face front-face">
+            <div class="card-content">
+                <p>DÉCOUVRIR LE PASS MOBILITÉ</p>
+                <img class="card-image" id="Forum" src="/carte-pass-mobilite.webp" alt="Aperçu du Forum">
+            </div>
+        </div>
+        <div class="card-face back-face"></div>
+    </a>
+</div>
+
+    <br>
+    <div class="googlemaps_embed" width="600" height="450" id="id"></iframe>
+        {# normalement à supprimer #}
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3732.729213859447!2d7.740377904757415!3d48.58230915494751!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4796c84c2fd0e985%3A0xa2080a0fa85cbd37!2sAgence%20Commerciale%20%E2%80%A2%20CTS!5e0!3m2!1sfr!2sfr!4v1692686220718!5m2!1sfr!2sfr" width="" height="" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+{% endblock %}
+{% block javascripts %}
+    <script>
+
+
+function easeOutQuart(t) {
+    return 1 - (--t) * t * t * t;
+}
+
+window.addEventListener('mousemove', (event) => {
+    let cardMenus = document.querySelectorAll('.card-menu');
+    cardMenus.forEach((cardMenu) => {
+        let boundingRect = cardMenu.getBoundingClientRect();
+        if (
+            event.clientX >= boundingRect.left &&
+            event.clientX <= boundingRect.right &&
+            event.clientY >= boundingRect.top &&
+            event.clientY <= boundingRect.bottom
+        ) {
+            let x = boundingRect.left + boundingRect.width / 2;
+            let y = boundingRect.top + boundingRect.height / 2;
+            let deltaX = event.clientX - x;
+            let deltaY = event.clientY - y;
+            // Inverse les valeurs des rotations pour les axes haut-bas et gauche-droite
+            let rotationX = Math.max(Math.min(deltaY / -3, 30), -30);
+            let rotationY = Math.max(Math.min(deltaX / 3, 30), -30);
+            // Utilise la fonction d'interpolation pour adoucir l'effet
+            let distanceFactor = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+            distanceFactor = Math.min(distanceFactor, 100) / 100; // Limite le facteur entre 0 et 1
+            rotationX *= distanceFactor;
+            rotationY *= distanceFactor;
+
+            cardMenu.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg) translateZ(30px)`;
+        } else {
+            cardMenu.style.transform = 'rotateX(0) rotateY(0) translateZ(0)';
+        }
+    });
+});
+
+window.addEventListener('mouseout', (event) => {
+    let cardMenus = document.querySelectorAll('.card-menu');
+    cardMenus.forEach((cardMenu) => {
+        cardMenu.style.transform = 'rotateX(0) rotateY(0) translateZ(0)';
+    });
+});
+
+
+        <script type="text/javascript">
+        (tarteaucitron.job = tarteaucitron.job || []).push('maps_noapi');
+        </script>
+
+    </script>
+
+{% endblock %}

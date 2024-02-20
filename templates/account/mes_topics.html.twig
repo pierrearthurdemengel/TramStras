@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Sujets{% endblock %}
+
+{% block body %}
+    <h1>Mes Sujets</h1>
+    <div class="container">
+        {% if topics|length > 0 %}
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Catégorie</th> <!-- J'ai remplacé Description par Catégorie, ajustez selon vos besoins -->
+                        <th>Date de Création</th>
+                        <!-- Ajoutez d'autres champs si nécessaire -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for topic in topics %}
+                        <tr>
+                            <td><a href="{{ path('app_topic_show', {'id': topic.id}) }}">{{ topic.titre }}</a></td>
+                            <td>{{ topic.categorie ? topic.categorie.nom_categorie : '' }}</td>
+                            <td>{{ topic.creationDate|date('d/m/Y H:i') }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Vous n'avez pas encore créé de sujets.</p>
+        {% endif %}
+    </div>
+{% endblock %}

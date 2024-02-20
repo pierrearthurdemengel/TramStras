@@ -1,0 +1,12 @@
+<h1>Bienvenue sur TramStras ! S'il vous plaît, veuillez confirmer votre email !</h1>
+
+<p>
+<h1>Bienvenue sur TramStras ! </h1>
+    S'il vous plaît, vous pouvez confirmer votre adresse email en cliquant sur le liens suivant : <br><br>
+    <a href="{{ signedUrl|raw }}">Confirmer mon Email</a>.
+    Le liens expire le  {{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }}.
+</p>
+
+<p>
+    Et voilà, c'est tout ! Vous avez rejoint la grande famille de TramStras.
+</p>

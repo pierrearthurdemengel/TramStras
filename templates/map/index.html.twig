@@ -1,0 +1,557 @@
+{% extends 'base.html.twig' %} 
+{% block stylesheets %}
+{{ parent() }}
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+  integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+  crossorigin=""
+/>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.css"
+/>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.Default.css"
+/>
+{# Nominatim (Leaflet Control Geocoder) #}
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css"
+/>
+{# Leaflet Routing Machine #}
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css"
+/>
+
+<style>
+  #map {
+    height: 100vh;
+    border: 2px solid white;
+  }
+
+  .leaflet-marker-icon .leaflet-zoom-animated .leaflet-interactive{
+    opacity : 1;
+  }
+</style>
+{% endblock %} {% block body %}
+
+<h1>La Carte du Réseau CTS</h1> 
+
+        <div id="map"></div>
+        <p>Application, produit ou service, intégrant les
+Informations publiques de la Compagnie des Transports Strasbourgeois grâce à leur API. Dernière mise à jour le
+02/02/2024.</p>
+
+
+
+
+{% endblock %} 
+{% block javascripts %}
+{{ parent() }}
+<script
+  src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+  integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+  crossorigin=""
+></script>
+{# Nominatim (Leaflet Control Geocoder) #}
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+{# Cluster #}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js"></script>
+{# Leaflet rooting machine #}
+<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
+<script>
+  		var stopTimesUrlTemplate = "{{ path('horaires_map', {'stopCode': 'stopCode'}) }}";
+		var userLat = null;
+		var userLng = null;
+		var isUserLocationKnown = false;
+
+
+
+  document.addEventListener('DOMContentLoaded', function () {
+
+  var mapElement = document.getElementById('map');
+
+  if (mapElement && ! mapElement._leaflet_id) {
+  var markers = {{ markers | json_encode | raw }};
+  var polylines = {{ polylines | json_encode | raw }};
+
+  // initialise le cadrage de la carte
+  var map = L.map('map').setView([48.5734053, 7.7521113], 13);
+
+  var individualMarkers = L.layerGroup();
+  var customMarkersLayer = L.layerGroup();
+  var customIconsLayer = L.layerGroup();
+  var individualLayerGroup = L.layerGroup(); 
+  
+// Initialise le groupement de clusters
+// avec des Settings avencés clusters
+  var markersClusterGroup = L.markerClusterGroup({
+
+    // Personnalisez la couleur en fonction du nombre de points dans le cluster
+    iconCreateFunction: function (cluster) {
+        var count = cluster.getChildCount();
+        var size = "small";
+        var color = "green";
+
+        if (count > 10) {
+            color = "yellow";
+        }
+        if (count > 100) {
+            color = "red";
+            size = "large";
+        }
+
+        // Retourne une nouvelle icône pour le cluster
+        return L.divIcon({
+            html: '<div><span>' + count + '</span></div>',
+            className: 'marker-cluster marker-cluster-' + size + ' marker-cluster-' + color,
+            iconSize: L.point(40, 40)
+        });
+    },
+
+    // la distance entre les marqueurs avant qu'ils ne soient regroupés
+    maxClusterRadius: 100 // par défaut, c'est 80
+});
+
+// Tuiles
+var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+    maxZoom: 18
+}).addTo(map);
+
+// on active la gestion d'itinéraires
+var routingControl = L.Routing.control({
+    geocoder: L.Control.Geocoder.nominatim(),
+    // Style de la ligne d'itinéraire
+    lineOptions: {
+        styles: [{
+            color: '#e53236',
+            opacity: 1,
+            weight: 10
+        }]
+    },
+    // met le détail de l'itinéraire à prendre en fr
+    router: new L.Routing.osrmv1({
+        language: 'fr',
+        // valeurs acceptés -> 'car', 'bike' ou 'foot' mais pas possible car demo server
+        profile: 'car'
+    })
+}).addTo(map)
+
+
+
+// AJOUT DES LIGNES
+
+// Créer les couches WMS pour Tram et Bus
+var wmsLayerTram = L.tileLayer.wms('https://magosm.magellium.com/geoserver/ows', {
+    layers: 'magosm:france_tram_ltr_routes_line',
+    format: 'image/png',
+    transparent: true,
+    version: '1.3.0'
+}).addTo(map);
+
+var wmsLayerBus = L.tileLayer.wms('https://magosm.magellium.com/geoserver/ows', {
+    layers: 'magosm:france_bus_routes_line',
+    format: 'image/png',
+    transparent: true,
+    version: '1.3.0'
+}).addTo(map);
+
+
+var baseMaps = {
+    "OpenStreetMap": osmLayer
+};
+
+// Bouton controle Map, ajoute les couches au contrôleur de couche
+var overlayMaps = {
+    "Tramways": wmsLayerTram,
+    "Bus": wmsLayerBus,
+    "Clusters": markersClusterGroup,
+    "Custom Icons": customIconsLayer
+};
+
+L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+// Événement lorsqu'un calque est retiré
+map.on('overlayremove', function (eventLayer) {
+    // Si le calque retiré est 'Clusters', alors ajoute les icônes personnalisées à la carte
+    if (eventLayer.name === 'Clusters') {
+        customMarkersLayer.removeFrom(map); // retirez cette ligne, elle n'est pas nécessaire ici
+        map.addLayer(individualMarkers);   // Affichez les marqueurs individuels sans les regrouper
+    }
+    // Si le calque retiré est 'Custom Icons', alors retire les icônes personnalisées
+    if (eventLayer.name === 'Custom Icons') {
+        customIconsLayer.removeFrom(map);
+    }
+});
+
+// Événement lorsqu'un calque est ajouté
+map.on('overlayadd', function (eventLayer) {
+    // Si le calque ajouté est 'Clusters', alors retire les marqueurs personnalisés
+    if (eventLayer.name === 'Clusters') {
+        customIconsLayer.addTo(map);
+        individualMarkers.removeFrom(map);   // Ajoutez cette ligne pour retirer les marqueurs individuels
+    }
+    // Si le calque ajouté est 'Custom Icons', alors ajoute les icônes personnalisées
+    if (eventLayer.name === 'Custom Icons') {
+        customIconsLayer.addTo(map);
+    }
+});
+
+
+
+
+
+//		MARKERS
+
+var customIcon = L.icon({
+    iconUrl: "{{ asset('arret-de-bus.png') }}",
+    iconSize: [
+        20, 20
+    ],
+    iconAnchor: [10, 20],
+    popupAnchor: [-3, -76]
+});
+
+var userLocationIcon = L.icon({
+    iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Rond_bleu.png?20140330010413',
+    iconSize: [
+        32, 32
+    ], // Taille de l'icône
+    iconAnchor: [
+        16, 16
+    ], // Position de l'icône par rapport à son emplacement
+});
+
+
+var customMarkerIcon = L.icon({
+    iconUrl: 'https://img.icons8.com/fluency/48/000000/map-pin.png',
+    iconSize: [
+        48, 48
+    ],
+    iconAnchor: [
+        24, 48
+    ],
+    popupAnchor: [-3, -76]
+});
+
+// ajout de la variable lastMarker
+var lastMarker = null;
+
+map.on('click', function (e) {
+    {% if not app.user %}
+    var modal = document.getElementById("myModal");
+    modal.style.display = "block";
+    {% else %}
+    // supprime le dernier marqueur si existant
+    if (lastMarker !== null) {
+        console.log("if (lastMarker !== null) { ok ");
+
+        lastMarker.remove();
+    }
+
+    var marker = L.marker(e.latlng, { icon: customMarkerIcon }).addTo(map);
+    individualMarkers.addLayer(marker);
+    customMarkersLayer.addLayer(marker);
+
+    lastMarker = marker; // mise à jour de la variable lastMarker
+
+    var popupContent = `
+                        <form id="textForm">
+                            <label for="text">Veuillez entrer l'étiquette du marqueur : </label>
+                            <input type="text" id="text" name="text">
+                            <input type="submit" value="Poster">
+                        </form>
+                    `;
+    marker.bindPopup(popupContent).openPopup();
+
+    // Supprime le marqueur seulement si l'utilisateur a fermé la popup sans soumettre
+    marker.on('popupclose', function (e) {
+        if (lastMarker === marker) {
+            marker.remove();
+            // réinitialise la variable lastMarker
+            lastMarker = null;
+        }
+    });
+
+    document.getElementById("textForm").addEventListener('submit', function (event) {
+        event.preventDefault();
+        var text = document.getElementById('text').value;
+        var isConfirmed = confirm("Êtes-vous sûr de vouloir ajouter ce marqueur d'alerte ici ?");
+        if (isConfirmed) {
+            var url = '{{ path('post_create') }}';
+            var formData = new FormData();
+            formData.append('lat', e.latlng.lat);
+            formData.append('lng', e.latlng.lng);
+            formData.append('text', text);
+
+            fetch(url, {
+                method: 'POST',
+                body: formData
+            }).then(function (response) {
+                if (!response.ok) {
+                    throw new Error('Erreur HTTP ' + response.status);
+                }
+                console.log('Marqueur enregistré avec succès !');
+                marker.bindPopup(text).openPopup();
+                lastMarker = null; // mise à jour de la variable lastMarker
+            }).catch(function (error) {
+                console.error('Erreur lors de l\'enregistrement du marqueur :', error);
+            });
+        } else { // Supprime le marqueur si l'utilisateur n'a pas confirmé
+            marker.remove();
+            lastMarker = null; // réinitialise la variable lastMarker
+        }
+    });
+    {% endif %}
+});
+
+
+function init() {
+    if (Array.isArray(markers)) {
+        for (var i = 0; i < markers.length; i++) {
+            var markerData = markers[i];
+            if (markerData.latitude !== undefined && markerData.longitude !== undefined) {
+                var marker;
+                if (markerData.isCustom) {
+                    marker = L.marker([
+                        markerData.latitude, markerData.longitude
+                    ], { icon: customMarkerIcon });
+                    customIconsLayer.addLayer(marker);
+                } else {
+                    marker = L.marker([
+                        markerData.latitude, markerData.longitude
+                    ], { icon: customIcon });
+                    individualMarkers.addLayer(marker);
+                }
+
+                var popupContent = '';
+					
+                if (markerData.isCustom && markerData.text) {
+                    popupContent += markerData.text + '<br>';
+                }
+                customMarkersLayer.addTo(map);
+
+                for (var j = 0; j < markerData.linesDestinations.length; j++) {
+                    popupContent += markerData.linesDestinations[j] + '<br>';
+                }
+
+                // Ajout de la condition
+                if (!markerData.isCustom) {
+                    var stopTimesUrl = stopTimesUrlTemplate.replace('stopCode', markerData.stopCode);
+                    popupContent += '<strong>' + markerData.stopName + ' : </strong><br>';
+                    popupContent += '<button class="loadStopTimes" data-stop-url="' + stopTimesUrl + '">Voir les horaires</button>';
+                    popupContent += '<button class="getDirections" data-lat="' + markerData.latitude + '" data-lng="' + markerData.longitude + '">M\'y rendre</button>';
+                }
+
+                //lie marker à popupContent
+                marker.bindPopup(popupContent);
+
+                // Ajoute les marqueurs au groupe de clusters
+                if (!markerData.isCustom) {
+                    markersClusterGroup.addLayer(marker);
+                    individualMarkers.addLayer(marker);
+                }
+            }
+        }
+
+        // Ajoute le groupe de clusters à la carte après avoir terminé d'ajouter tous les marqueurs
+        map.addLayer(markersClusterGroup);
+
+        for (var k = 0; k < polylines.length; k++) {
+            var polylineData = polylines[k];
+            var lineCoordinates = polylineData.coordinates;
+
+            if (Array.isArray(lineCoordinates) && lineCoordinates.length >= 2) {
+                var polyline = L.polyline(lineCoordinates, { color: polylineData.color }).addTo(map);
+                polyline.bindPopup(polylineData.lineName);
+            }
+        }
+    } else {
+        console.error('Format de données incorrect pour les marqueurs ou les polylignes.');
+    }
+}
+
+
+
+
+init();
+
+  }
+
+if (navigator.geolocation) {
+    navigator.geolocation.watchPosition(success, error, {
+        enableHighAccuracy: true,
+        maximumAge: 30000,
+        timeout: 27000
+    });
+} else {
+    console.warn('La géolocalisation n\'est pas supportée par ce navigateur.');
+}
+
+function success(userPosition) {
+    userLat = userPosition.coords.latitude;
+    userLng = userPosition.coords.longitude;
+    isUserLocationKnown = true;
+
+    var accuracy = userPosition.coords.accuracy;
+
+    var youAreHereIcon = L.icon({
+        iconUrl: 'https://png.pngtree.com/png-vector/20230320/ourmid/pngtree-you-are-here-location-pointer-vector-png-image_6656543.png',
+		// https://lepetitalsacien.fr/wp-content/uploads/2021/03/Le-Ptit-Alsacien-Drapeau-copyright-562x1024.png
+        iconSize: [60, 60],
+        iconAnchor: [30, 30],
+        popupAnchor: [-3, -76],
+        shadowAnchor: [22, 94]
+    });
+
+    L.marker([
+        userLat, userLng
+    ], {
+        icon: youAreHereIcon,
+        title: 'Vous êtes ici',
+        alt: 'Marqueur "vous êtes ici"'
+    }).addTo(map);
+
+    // Cercle de précisiion Optionnel
+    L.circle([
+        userLat, userLng
+    ], { radius: accuracy }).addTo(map);
+}
+
+function error(err) {
+    console.warn('Erreur lors de la récupération de la position : ' + err.message);
+}
+
+  });
+
+
+    // Handler pour loadStopTimes
+document.addEventListener('click', function (event) {
+    if (event.target && event.target.classList.contains('loadStopTimes')) {
+        var stopTimesUrl = event.target.getAttribute('data-stop-url');
+
+        fetch(stopTimesUrl)
+            .then(response => response.json())
+            .then(data => {
+                if (data.stopTimes && data.stopTimes.length > 0) {
+                    var destination = data.stopTimes[0].destinationName;
+                    var times = data.stopTimes.map(item => item.expectedDepartureTime);
+                    var timesHTML = `<strong>Direction: ${destination}</strong><br>` + times.join('<br>');
+                    event.target.parentNode.innerHTML = timesHTML;
+                } else {
+                    console.warn('Aucun horaire disponible');
+                }
+            })
+            .catch(error => {
+                console.error('Erreur lors de la récupération des horaires:', error);
+            });
+    }
+
+    if (event.target && event.target.classList.contains('getDirections')) {
+        if (isUserLocationKnown) {
+            var destinationLat = event.target.getAttribute('data-lat');
+            var destinationLng = event.target.getAttribute('data-lng');
+
+            // Identifier les éléments de saisie
+            var startInput = document.querySelector('.leaflet-routing-geocoder input[placeholder="Start"]');
+            var endInput = document.querySelector('.leaflet-routing-geocoder input[placeholder="End"]');
+
+            // Affecter les coordonnées à ces éléments de saisie
+            if (startInput && endInput) {
+                // userLat et userLng contiennent la latitude et la longitude de l'utilisateur.
+                startInput.value = userLat + ', ' + userLng;
+                endInput.value = destinationLat + ', ' + destinationLng;
+
+            } else {
+                console.warn('Impossible de trouver les éléments de saisie du formulaire.');
+            }
+        } else {
+            alert("Votre position n'est pas encore connue. Veuillez attendre un instant et réessayer.");
+        }
+    }
+
+});
+
+// modal Connexion / Inscription
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    // Récupération de la modal et du bouton de fermeture
+    var modal = document.getElementById("myModal");
+    var span = modal ? modal.querySelector(".close") : null;
+    
+    // Fermeture de la modale
+    if(span){
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+    }
+
+    // Fermer la modale en cliquant en dehors
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    // Vérification si l'utilisateur est connecté
+    {% if not app.user %}
+        // Si l'utilisateur n'est pas connecté, afficher la modale directement
+        if(modal) modal.style.display = "block";
+    {% endif %}
+});
+
+// Gestionnaire de clic pour la carte si nécessaire
+if (document.getElementById("mapContainer")) {
+    map.on('click', function (e) {
+        e.preventDefault();
+        {% if app.user %}
+            // Si l'utilisateur est connecté, afficher une confirmation pour ajouter un marqueur
+            var isConfirmed = confirm("Êtes-vous sûr de vouloir ajouter ce marqueur d'alerte ici ?");
+            if (isConfirmed && modal) {
+                modal.style.display = "block";
+            }
+        {% else %}
+            // Si l'utilisateur n'est pas connecté, afficher une alerte standard
+            alert("Vous devez être connecté pour avoir accès à cette fonctionnalitée.");
+        {% endif %}
+    });
+}
+
+// Minifier leaflet routing machine 
+// Fonction pour gérer la minification
+function handleMinification() {
+    if (window.innerWidth < 650) {
+        const routingContainer = document.querySelector('.leaflet-routing-container');
+        if (routingContainer && !routingContainer.classList.contains('leaflet-routing-container-hide')) {
+            routingContainer.classList.add('leaflet-routing-container-hide');
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    // Minifier au chargement de la page
+    handleMinification();
+
+    // Écouteur d'événement click pour les boutons getDirections
+    document.addEventListener('click', (e) => {
+        if(e.target && e.target.classList.contains('getDirections')) {
+            const routingContainer = document.querySelector('.leaflet-routing-container.leaflet-routing-container-hide');
+            if (routingContainer) {
+                routingContainer.classList.remove('leaflet-routing-container-hide');
+            }
+        }
+    });
+});
+
+// Minifier lors du redimensionnement de la fenêtre
+window.addEventListener('resize', handleMinification);
+
+
+
+</script>
+{% endblock %}

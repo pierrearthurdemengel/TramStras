@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello PostController!{% endblock %}
+
+{% block style %}
+{% endblock %}
+
+
+{% block body %}
+    <div class="chat-page">
+        <div class="chat-header">
+            <h1>
+                <a href="{{ path('show_categorie', {'id': categorie.id}) }}">Topic : {{ topic.titre }}</a>
+            </h1>
+        </div>
+<div class="chat-window">
+    <div class="chat-messages">
+        {% if posts|length > 0 %}
+            {% for post in posts %}
+                <div class="chat-message {% if post.user and post.user == app.user %}outgoing{% else %}incoming{% endif %}">
+                    <div class="message-bubble {% if post.user and post.user == app.user %}outgoing-bubble{% else %}incoming-bubble{% endif %}">
+                        {% if post.user %}
+                            {% if post.user.imagesUsers and post.user.imagesUsers.imageName %}
+                                <img id="ImgProfileMess" class="user-profile-image" src="{{ vich_uploader_asset(post.user.imagesUsers, 'imageFile') }}" alt="{{ post.user.pseudo }}'s profile image">
+                            {% else %}
+                                <img class="user-profile-image" src="\utilisateur (1).png" alt="Default profile image">
+                            {% endif %}
+                            <span class="username">
+                                {% if 'ROLE_ADMIN' in post.user.roles %}
+                                    admin
+                                {% else %}
+                                    {{ post.user.pseudo }}
+                                {% endif %}
+                            </span>
+                        {% else %}
+                            <img class="user-profile-image" src="\utilisateur (1).png" alt="Default profile image">
+                            <span class="username">Anonyme</span>
+                        {% endif %}
+                        <p class="message-text">{{ post.text }}</p>
+                        <span class="message-date">{{ post.datePost|date('Y-m-d H:i:s') }}</span>
+                    </div>
+                    {% if post.user and post.user == app.user %}
+                        <div class="message-actions">
+                            <a class="btn btn-delete" href="{{ path('delete_post', {'id': post.id}) }}">
+                                Supprimer <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Aucun message disponible dans ce Sujet. Soyez le premier à réagir !</p>
+        {% endif %}
+</div>
+
+    <div class="chat-input">
+                    <h2>Poster un nouveau message</h2>
+                    
+                    {% if app.user %}
+                        {{ form_start(form, {'attr': {'class': 'form-chat'}}) }}
+                        {{ form_widget(form) }}
+                        <button type="submit" class="btn btn-primary">Ajouter</button>
+                        {{ form_end(form) }}
+                    {% else %}
+                        <p>Vous devez être connecté pour participer à la conversation.</p>
+                        <ul>
+                            <li>
+                                <a href="{{ path('app_login') }}">Se connecter</a>
+                            </li>
+                            <li>
+                                <a href="{{ path('app_register') }}">S'inscrire</a>
+                            </li>
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p>Êtes-vous sûr de vouloir supprimer ce message ?</p>
+        <a id="confirmDelete" class="btn btn-danger" href="#">Confirmer</a>
+        <button id="cancelDelete" class="btn btn-secondary">Annuler</button>
+    </div>
+    </div>
+
+{% endblock %}

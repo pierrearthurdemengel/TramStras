@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Timetable{% endblock %}
+
+{% block body %}
+    <h1>Horaire pour l'arrêt  {{ stopCode }}</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Nom de l'arrêt</th>
+                <th>Direction</th>
+                <strong>
+                <th>Heures de départ prévu</th>
+                </strong>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stopTime in stopTimes %}
+                <tr>
+                    <td>{{ stopTime.stopPointName }}</td>
+                    <td>{{ stopTime.destinationName }}</td>
+                    <td>{{ stopTime.expectedDepartureTime }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3">Plus de départs prévu dans les deux prochaines heures</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

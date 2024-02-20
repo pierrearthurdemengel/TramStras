@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Publications{% endblock %}
+{% block stylesheet %}
+<style>
+.container {
+    background: var(--white-color);
+    box-shadow: var(--card-shadow-neumorphism);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.table {
+    margin-bottom: 0; /* Pour enlever la marge en bas de la table */
+}
+
+.table-hover tbody tr:hover {
+    background: var(--grey-color);
+}
+
+.table th,
+.table td {
+    padding: 1rem;
+    box-shadow: var(--btn-shadow-inset-neumorphism);
+}
+
+a.text-decoration-none.text-dark {
+    box-shadow: var(--btn-shadow-neumorphism);
+    border-radius: 5px;
+    display: inline-block;
+    padding: 5px;
+    transition: all var(--transition-speed);
+}
+
+a.text-decoration-none.text-dark:hover {
+    box-shadow: var(--btn-shadow-inset-neumorphism);
+}
+
+p.text-muted {
+    text-align: center;
+    font-style: italic;
+}
+</style>
+{% endblock %}
+
+{% block body %}
+    <h1 class="my-4">Mes Publications</h1>
+    <div class="container">
+        {% if posts|length > 0 %}
+        <card>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Message</th>
+                        <th>Date de Publication</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for post in posts %}
+                        <tr>
+                            <td>
+                                <a href="{{ path('app_topic_show', {'id': post.topic.id}) }}" class="text-decoration-none text-dark">
+                                    {{ post.text|length > 50 ? post.text|slice(0, 50) ~ '...' : post.text }}
+                                </a>
+                            </td>
+                            <td>{{ post.datePost|date('d/m/Y H:i') }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="text-muted">Vous n'avez pas encore publié de posts.</p>
+        {% endif %}
+        </card>
+    </div>
+{% endblock %}

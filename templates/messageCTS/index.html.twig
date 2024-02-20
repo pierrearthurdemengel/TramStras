@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<h2>Messages de Perturbation</h2>
+	{% for message in messages %}
+		<div class="card-messageCTS {{ message.Content.Priority == 'Urgent' ? 'urgent-card' : '' }}">
+			<div class="card-body-messageCTS">
+				<h3>{{ message.RecordedAtTime|date('d/m/Y à H:i') }} <!-- Formatage de la date -->
+				<span class="priority-badge">{{ message.Content.Priority }}</span></h3> <!-- Badge de priorité -->
+				
+				{% for msg in message.Content.Message %}
+					{% for text in msg.MessageText %}
+						<p lang="{{ text.Lang }}">{{ text.Value | raw }}</p>
+					{% endfor %}
+				{% endfor %}
+			</div>
+		</div>
+	{% else %}
+		<p>Aucun message trouvé</p>
+	{% endfor %}
+{% endblock %}

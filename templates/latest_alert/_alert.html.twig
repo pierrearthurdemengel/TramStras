@@ -1,0 +1,94 @@
+{# templates/latest_alert/_alert.html.twig #}
+
+{% if alerte %}
+
+{% set mois = ["", "janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"] %}
+
+
+<div class="overlay"></div>
+<div class="card-alerte">
+    <h2>Nouvelle Alerte le {{ alerte.alerteDate|date('d') ~ ' ' ~ mois[alerte.alerteDate|date('n')] ~ ' ' ~ alerte.alerteDate|date('Y') }} à {{ alerte.alerteDate|date('H:i:s') }}</h2><br>
+    L'utilisateur {{ (alerte.user is not null and alerte.user.pseudo is not null) ? alerte.user.pseudo : 'Anonyme' }} a posté une nouvelle alerte 
+    dans le tram ligne {{ alerte.ligne }} direction {{ alerte.sens }}
+    <button class="close-alerte">Fermer</button>
+</div>
+
+
+
+
+
+
+
+{% block javascripts %}
+
+<script>
+    // Fonction pour créer un cookie
+    function setCookie(name, value, days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "") + expires + "; path=/; secure"; // Ajout de "secure" pour HTTPS
+}
+
+
+    // Fonction pour obtenir la valeur d'un cookie
+    function getCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+
+    function attachCloseHandlers() {
+        var cardAlerte = document.querySelector(".card-alerte");
+        if (cardAlerte) {
+            var closeButton = cardAlerte.querySelector(".close-alerte");
+            closeButton.addEventListener("click", function() {
+                cardAlerte.style.display = "none";
+                var overlay = document.querySelector(".overlay");
+                if (overlay) {
+                    overlay.style.display = "none";
+                }
+
+                // Stocker un cookie pour se rappeler que cette alerte a été vue
+                setCookie("alerteSeen", "{{ alerte.id }}", 1);
+            });
+
+            // Fermer la fenêtre modale d'alerte en cliquant en dehors
+            var overlay = document.querySelector(".overlay");
+            if (overlay) {
+                overlay.addEventListener("click", function() {
+                    cardAlerte.style.display = "none";
+                    overlay.style.display = "none";
+                });
+            }
+        }
+    }
+
+
+    document.addEventListener("DOMContentLoaded", function() {
+    var cardAlerte = document.querySelector(".card-alerte");
+    var overlay = document.querySelector(".overlay");
+    
+    // Vérifie si l'alerte a déjà été vue
+    var alerteSeen = getCookie("alerteSeen");
+
+    if (alerteSeen !== "{{ alerte.id }}") {
+        setTimeout(function() {
+            if (cardAlerte) cardAlerte.style.display = "block";
+            if (overlay) overlay.style.display = "block";
+            attachCloseHandlers();
+        }, 10000); 
+    } 
+});
+
+</script>
+{% endblock %}
+{% endif  %}

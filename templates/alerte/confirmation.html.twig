@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="card">
+        <h1>Confirmation d'alerte</h1>
+        <p>Courage, nous avons informé les autres utilisateurs de l'application que vous souhaitez une assistance.</p>
+        <p>Vous pouvez joindre les gardiens de la paix ici :</p>
+        <div class="buttons" style="display: flex; justify-content: center;">
+            <a href="tel:17" class="btn btn-primary login-button topic-link">Appeler la <strong>police au 17</strong></a>
+            <a href="tel:112" class="btn btn-primary login-button topic-link" style="margin-left: 10px;">Appeler les <strong>urgences au 112</strong></a></br>
+            <a href="tel:114" class="btn btn-primary login-button topic-link" style="margin-left: 10px;"><strong>Pour les malentandants</strong> : Appeler le 114 pour demander de l'aide</a>
+        </div>
+        <p>Pour signaler une violence en ligne, vous pouvez utiliser ce lien :</p>
+        <div class="buttons" style="display: flex; justify-content: center;">
+            <a href="https://www.service-public.fr/cmi" class="btn btn-primary login-button topic-link">Signaler une violence <strong> en ligne </strong></a>
+        </div>
+        <p>Voici quelques conseils pour bien réagir à une agression dans les transports en commun :</p>
+        <ul>
+            <li>Restez calme et ne répondez pas à la violence par la violence.</li>
+            <li>Essayez de vous éloigner de la situation en vous déplaçant vers un endroit plus sûr.</li>
+            <li>Si possible, demandez de l'aide au personnel du transport en commun ou à d'autres passagers.</li>
+            <li>Si vous vous sentez en danger immédiat, appelez les autorités.</li>
+            <li>Prenez note des détails de l'agression pour pouvoir les communiquer aux autorités ultérieurement.</li>
+        </ul>
+    </div>
+{% endblock %}

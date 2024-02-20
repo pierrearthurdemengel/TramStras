@@ -1,0 +1,21 @@
+framework:
+    secret:          ThisIsNotReallyASecretSoPleaseChangeIt
+    validation:      { enabled: true }
+    test: true
+    form: ~
+
+twig:
+    strict_variables: true
+
+services:
+    karser_recaptcha3.google.recaptcha:
+        class: Karser\Recaptcha3Bundle\Tests\fixtures\RecaptchaMock
+        public: true
+
+    form.factory.public:
+        alias: form.factory
+        public: true
+
+    twig.public:
+        alias: twig
+        public: true

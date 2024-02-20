@@ -1,0 +1,4 @@
+Consommer une API avec HttpClient et Symfony 5 : Les chiffres du COVID
+https://www.youtube.com/watch?v=7LxlFzLx-9A
+Mettre en place un paiement via Stripe Checkout & PHP - grafikart
+https://youtu.be/k9ZA8BoNFik

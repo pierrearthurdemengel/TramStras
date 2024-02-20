@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Alertes{% endblock %}
+{% block stylesheet %}
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    <div class="alerte-container">
+        <h1>Liste des Alertes</h1>
+<main class="content-container">
+    <div class="center-wrapper">
+        <a href="{{ path('statistiques_alertes') }}" class="alerte-link">Voir les Statistiques des Alertes</a>
+    </div>
+</main>
+        <div class="container">
+            <div class="row">
+                {% for alerte in alertes %}
+                    <div class="col-md-6">
+                        <div class="card mb-3 alerte-card">
+                            <div class="card-header alerte-card-header">
+                                Ligne: {{ alerte.ligne }}
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text alerte-card-text">
+                                    <strong>Sens:</strong> {{ alerte.sens|default('N/A') }}<br>
+                                    <strong>Date:</strong> {{ alerte.alerteDate|date('d-m-Y H:i') }}<br>
+                                    <strong>Utilisateur:</strong> {{ alerte.user.pseudo|default('Anonyme') }}</br>
+                                    {% if alerte.user.imagesUsers %}
+                                            <div class="alerte-user-image">
+                                                <img src="{{ vich_uploader_asset(alerte.user.imagesUsers, 'imageFile') }}" alt="Image de profil" style="width: 100%; height: 100%; object-fit: cover;">
+                                            </div>
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="col">
+                        <p class="alert alert-warning">Pas d'alertes trouvées.</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+{% block script %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+    // Association des couleurs à chaque ligne
+    var colorMapping = {
+        'Ligne A': '#e10d19',
+        'Ligne B': '#009ee0',
+        'Ligne C': '#f29400',
+        'Ligne D': '#009933',
+        'Ligne E': '#9085ba',
+        'Ligne F': '#97bf0d'
+    };
+
+    // Récupérer tous les éléments avec la classe 'alerte-card-header'
+    var headers = document.querySelectorAll('.alerte-card-header');
+
+    headers.forEach(function(header) {
+        // Récupérer le nom de la ligne à partir du texte du header
+        var ligneName = header.innerText.trim().split(":")[1].trim();
+
+        // Appliquer la couleur associée
+        if (colorMapping[ligneName]) {
+            header.style.backgroundColor = colorMapping[ligneName];
+        }
+    });
+});
+
+    </script>
+{% endblock %}
+{% endblock %}

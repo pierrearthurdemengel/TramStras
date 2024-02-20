@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block style %}
+<style>
+
+</style>
+{% endblock %}
+
+{% block body %}
+<h1>La liste des catégories</h1>
+
+<div class="container">
+ </a>
+
+<div class="card-wrapper">
+
+{% for categorie in categories %}
+
+<a href="{{ path('show_categorie', {'id': categorie.id}) }}" class="card-menu">
+  <div class="card-face front-face" data-card="{{ categorie.dataCard }}"> 
+    <div class="card-content">
+        <h1 class="tcardCat" >{{ categorie.nom_categorie }}</h1>
+    </div>
+  </div>
+  <div class="card-face back-face"></div>
+</a>
+{% endfor %}
+
+</div>
+
+</div>
+{% endblock %}
+
+{% block script %}
+
+
+{% endblock %}
+
+

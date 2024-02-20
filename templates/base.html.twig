@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>
+			{% block title %}TramStras{% endblock %}
+		</title>
+        <meta name="description" content="{% block meta_description %}Par et pour les strasbourgeois ! Rejoignez la communauté des voyageurs de la CTS pour mieux voyager. {% endblock %}">
+        <meta name="keywords" content="CTS, transport cts, Tram, Bus, Strasbourg, horaires, Forum, Topics, Société de Transport Strasbourgeoise, session">
+		<link rel="icon" href="{{ asset('icon.ico') }}" type="image/icon">
+        <link rel="stylesheet" href="{{ asset('stylesheet.css') }}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" />
+		<script src="{{ asset('jquery-3.7.0.min.js') }}"></script>
+		<script src="{{ asset('notif.js') }}"></script>
+		<script src="\tarteaucitron.js-1.14.0\tarteaucitron.js"></script>
+
+        <script type="text/javascript">
+        tarteaucitron.init({
+    	  "privacyUrl": "", /* Privacy policy url */
+          "bodyPosition": "bottom", /* or top to bring it as first element for accessibility */
+
+    	  "hashtag": "#tarteaucitron", /* Open the panel with this hashtag */
+    	  "cookieName": "tarteaucitron", /* Cookie name */
+    
+    	  "orientation": "middle", /* Banner position (top - bottom) */
+       
+          "groupServices": false, /* Group services by category */
+          "showDetailsOnClick": true, /* Click to expand the description */
+          "serviceDefaultState": "wait", /* Default state (true - wait - false) */
+                           
+    	  "showAlertSmall": false, /* Show the small banner on bottom right */
+    	  "cookieslist": false, /* Show the cookie list */
+                           
+          "closePopup": false, /* Show a close X on the banner */
+
+          "showIcon": true, /* Show cookie icon to manage cookies */
+          //"iconSrc": "", /* Optionnal: URL or base64 encoded image */
+          "iconPosition": "BottomLeft", /* BottomRight, BottomLeft, TopRight and TopLeft */
+
+    	  "adblocker": false, /* Show a Warning if an adblocker is detected */
+                           
+          "DenyAllCta" : true, /* Show the deny all button */
+          "AcceptAllCta" : true, /* Show the accept all button when highPrivacy on */
+          "highPrivacy": true, /* HIGHLY RECOMMANDED Disable auto consent */
+                           
+    	  "handleBrowserDNTRequest": false, /* If Do Not Track == 1, disallow all */
+
+    	  "removeCredit": false, /* Remove credit link */
+    	  "moreInfoLink": true, /* Show more info link */
+
+          "useExternalCss": false, /* If false, the tarteaucitron.css file will be loaded */
+          "useExternalJs": false, /* If false, the tarteaucitron.js file will be loaded */
+
+    	  //"cookieDomain": ".my-multisite-domaine.fr", /* Shared cookie for multisite */
+                          
+          "readmoreLink": "", /* Change the default readmore link */
+
+          "mandatory": true, /* Show a message about mandatory cookies */
+          "mandatoryCta": true /* Show the disabled accept button when mandatory on */
+        });
+        </script>
+
+  <script type="text/javascript">
+    tarteaucitron.user.googlemapsKey = 'API KEY';
+    (tarteaucitron.job = tarteaucitron.job || []).push('googlemaps');
+  </script>
+
+    <script type="text/javascript"> 
+    tarteaucitron.user.recaptchaapi = 'XXXXX';
+    (tarteaucitron.job = tarteaucitron.job || []).push('recaptcha');
+    </script>
+
+
+
+		{% block stylesheets %}
+			<style></style>
+		{% endblock %}
+	</head>
+    <style>
+
+/* social */
+
+.btn-social {
+    position: relative;
+    height: 100px; 
+    width: 100px; 
+    background: rgb(214, 214, 214);
+    border-radius: 40%;
+    box-shadow: -7px -7px 20px 0 rgba(255, 255, 255, 0.9),
+    7px 7px 20px 0 rgba(0, 0, 0, 0.3);
+    transition: 0.2s;
+}
+
+.btn-social i{
+    color: var(--black-color) !important;
+}
+
+.btn-social a {
+    padding: 30px;
+}
+
+.btn-social:hover {
+    transform: scale(1.1);
+}
+
+.btn-social::before {
+    content: "";
+    position: absolute;
+    height: 80%;
+    width: 80%;
+    background: rgb(214, 214, 214);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.btn-social:hover::before {
+    box-shadow: inset -7px -7px 20px 0 rgba(255, 255, 255, 1),
+    inset 7px 7px 20px 0 rgba(0, 0, 0, 0.3);
+}
+
+.btn-social i {
+    position: absolute;
+    color: rgb(73, 192, 192);
+    font-size: 35px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: 0.2s;
+}
+
+.btn-social:hover i {
+    font-size: 30px;
+    color : var(--darkred-color) !important;
+}
+
+.social-icons {
+    display: flex; /* Active Flexbox */
+    flex-wrap: wrap; /* Permet aux éléments d'aller à la ligne si l'espace est insuffisant */
+    align-items: center; /* Centre les boutons verticalement */
+    justify-content: space-around; /* Espacement autour de chaque bouton */
+    list-style: none; /* Enlève les puces de la liste */
+    padding: 40px; /* Enlève le padding de la liste */
+    margin: 0; /* Enlève la marge de la liste */
+}
+
+.social-icons a {
+
+    padding : 30px;
+}
+
+/* Modification pour les écrans de moins de 768px de large */
+@media (max-width: 1180px) {
+    .btn-social {
+        height: 80px;
+        width: 80px;
+    }
+    
+    .btn-social i {
+        font-size: 28px;
+    }
+    
+    .social-icons a {
+        padding: 20px;
+    }
+}
+
+/* Modification pour les écrans de moins de 480px de large */
+@media (max-width: 940px) {
+    .btn-social {
+        height: 60px;
+        width: 60px;
+    }
+    
+    .btn-social i {
+        font-size: 20px;
+    }
+    
+    .social-icons a {
+        padding: 25px;
+    }
+}
+
+
+
+
+    </style>
+<body data-theme="light-mode">
+<nav id="navbar">
+<div id="background-blur"></div>
+
+    <div id="menu-icon" aria-controls="menu" aria-expanded="false"></div>
+
+    <a href="/">
+    <img id="navbar-logo" src="/123484dc-3f1e-42ed-a487-f85a0f20e2a2.webp" alt="Logo de TramStras">
+    </a>
+
+    <ul id="menu" aria-hidden="true">
+        <div class="navbar-left">
+            <ul id="menu-left" aria-hidden="true">
+                <li><a href="/">Accueil</a></li>
+                <li><a href="{{ path('messageCTS') }}">Messages CTS</a></li>
+                <li><a href="{{ path('app_categorie') }}">Forum</a></li>
+                <li><a href="{{ path('points_map') }}">Carte</a></li>
+                <li><a href="{{ path('get_alerte') }}">Demander de l'aide</a></li>
+                <li><a href="{{ path('app_menu_tarif') }}">Tarifs CTS</a></li>
+                <!-- Icône utilisateur pour les écrans <850px -->
+                {% if app.user %}
+                    <li>
+                            <a href="{{ path('app_account') }}">Profil</a>
+                    </li>
+                    <li class="user-dropdown mobile">
+                            <a href="{{ path('app_logout') }}">Se déconnecter</a>
+                    </li>
+                {% else %}
+                    <li>
+                            <a href="{{ path('app_login') }}">Se connecter</a>
+                    </li>
+                    <li class="user-dropdown mobile">
+                            <a href="{{ path('app_register') }}">S'inscrire</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+
+        <!-- Icône utilisateur pour les écrans >850px -->
+        <div class="navbar-right">
+            <ul id="menu-right" aria-hidden="true">
+                <li class="user-dropdown desktop">
+                    <!-- Le même code que précédemment pour afficher l'icône utilisateur -->
+                </li>
+            </ul>
+        </div>
+    </ul>
+</nav>
+		<header>
+			<div class="container">
+				{% if not app.user %}
+					<div id="myModal" class="modal">
+						<div class="modal-content">
+							<span class="close" onclick="closeModal()">&times;</span>
+							<h2>Connectez-vous ou inscrivez-vous</h2>
+							<p>Vous devez être connecté pour ajouter un marqueur personnalisé.</p>
+							<div class="buttons">
+								<a href="{{ path('app_login') }}" class="login-button">Se connecter</a>
+								<a href="{{ path('app_register') }}" class="register-button">S'inscrire</a>
+							</div>
+						</div>
+					</div>
+				{% endif %}
+
+			</div>
+		</header>
+
+
+		<div id="latest-alert">
+			{% if latestAlert|default(false) %}
+				{% include 'latest_alert/_alert.html.twig' with {'alerte': latestAlert} %}
+			{% endif %}
+		</div>
+
+		{% block body %}
+
+		{% endblock %}
+		<footer class="footer parallax-footer">
+			<div
+				class="parallax-footer-content">
+
+				<!-- 1. Colonne Liens rapides -->
+				<div class="footer-column">
+					<h5>Liens rapides</h5>
+					<ul class="quick-links">
+						<li>
+							<a href="/conditions/CGV TramStras.pdf">Conditions Générales</a>
+						</li>
+						<li>
+							<a href="#">Politique de Cookies</a>
+						</li>
+						<li>
+							<a href="#">Politique de Confidentialité</a>
+						</li>
+					</ul>
+				</div>
+
+				<!-- 2. Colonne Réseaux sociaux -->
+
+
+<div class="footer-column">
+    <h5>Réseaux sociaux</h5>
+    <ul class="social-icons">
+        <li>
+            <a href="https://www.facebook.com/profile.php?id=61556134821946" class="btn-social">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+        </li>
+        <li>
+            <a href="https://www.instagram.com/tramstrascts/" class="btn-social">
+                <i class="fab fa-instagram"></i>
+            </a>
+        </li>
+        <li>
+            <a href="https://twitter.com/TramStras" class="btn-social">
+                <i class="fab fa-twitter"></i>
+            </a>
+        </li>
+        <li>
+            <a href="https://www.linkedin.com/in/pierre-arthur-demengel-b89a54248/" class="btn-social">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+				<!-- 3. Colonne Formulaire de contact -->
+                
+				<div class="footer-column">
+					<div class="card-form-footer">
+						<h5>Contactez-nous</h5>
+						{{ render(controller('App\\Controller\\ContactFormController::contactForm')) }}
+					</div>
+				</div>
+
+			</div>
+
+			<!-- Logo et Copyright -->
+			<div id="label">
+				<p>
+                Copyright © 2023 TramStras
+                Application, produit ou service, intégrant les
+                Informations publiques de la Compagnie des Transports Strasbourgeois grâce à leur API. Dernière mise à jour le
+                02/02/2024.
+                </p>
+			</div>
+		</footer>
+
+
+		{% block javascripts %}
+
+    <script>
+
+
+// Ouverture de la fenêtre modale
+function openModal(alerte) {
+var modal = document.getElementById("myModalAlerte");
+if (modal) {
+var modalContent = modal.querySelector(".modal-content");
+modalContent.querySelector('.ligne').textContent = alerte.ligne;
+modalContent.querySelector('.sens').textContent = alerte.sens;
+modalContent.querySelector('.user').textContent = alerte.user;
+modalContent.querySelector('.alerteDate').textContent = alerte.alerteDate;
+modal.style.display = "block";
+}
+}
+
+// Fonction pour créer un cookie
+function setCookie(name, value, days) {
+var expires = "";
+if (days) {
+var date = new Date();
+date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+expires = "; expires=" + date.toUTCString();
+}
+document.cookie = name + "=" + (
+value || ""
+) + expires + "; path=/";
+}
+
+// Fonction pour obtenir la valeur d'un cookie
+function getCookie(name) {
+var nameEQ = name + "=";
+var ca = document.cookie.split(';');
+for (var i = 0; i < ca.length; i++) {
+var c = ca[i];
+while (c.charAt(0) === ' ') 
+c = c.substring(1, c.length);
+
+
+
+if (c.indexOf(nameEQ) === 0) 
+return c.substring(nameEQ.length, c.length);
+
+
+
+}
+return null;
+}
+
+// Gestionnaire d'événement pour fermer la fenêtre modale d'alerte
+function attachCloseHandlers() {
+var cardAlerte = document.querySelector(".card-alerte");
+if (cardAlerte) {
+var closeButton = cardAlerte.querySelector(".close-alerte");
+closeButton.addEventListener("click", function () {
+cardAlerte.style.display = "none";
+var overlay = document.querySelector(".overlay");
+if (overlay) {
+overlay.style.display = "none";
+}
+});
+
+// Fermer la fenêtre modale d'alerte en cliquant en dehors
+var overlay = document.querySelector(".overlay");
+if (overlay) {
+overlay.addEventListener("click", function () {
+cardAlerte.style.display = "none";
+overlay.style.display = "none";
+});
+}
+}
+}
+
+
+
+attachCloseHandlers();
+    
+
+
+
+
+
+
+
+// Vérifie régulièrement s'il y a de nouvelles alertes
+function checkForNewAlerts() {
+$.ajax({
+url: '/getLatestAlertId',
+method: 'GET',
+dataType: 'json',
+success: function (response) {
+const alertId = response.id;
+if (alertId) {
+getAlertDetails(alertId);
+}
+}
+});
+}
+
+function getAlertDetails(alertId) {
+if (! alertId) 
+return;
+
+
+
+$.ajax({
+url: '/getAlertDetails/' + alertId,
+method: 'GET',
+dataType: 'json',
+success: function (response) {
+if (response.alertId) {
+openModal(response);
+}
+}
+});
+}
+
+// Vérifie si l'alerte a déjà été montrée
+var alerteCookie = getCookie("alerteShown");
+if (! alerteCookie) {
+setCookie("alerteShown", "true", 1);
+setInterval(checkForNewAlerts, 5000);
+}
+
+// Ferme la fenêtre modale d'alerte
+var modalAlerte = document.getElementById("myModalAlerte");
+if (modalAlerte) {
+var closeButton = modalAlerte.querySelector(".close");
+closeButton.addEventListener("click", function () {
+modalAlerte.style.display = "none";
+});
+
+window.addEventListener("click", function (event) {
+if (event.target === modalAlerte) {
+modalAlerte.style.display = "none";
+}
+});
+}
+
+
+
+
+;
+
+</script>
+
+		{% endblock %}</body> </html>

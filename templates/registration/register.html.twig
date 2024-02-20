@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}S'inscrire{% endblock %}
+
+{% block body %}
+
+{% for flash_error in app.flashes('verify_email_error') %}
+<div class="custom-alert alert-danger">{{ flash_error }}</div>
+{% endfor %}
+
+<div class="custom-login-form">
+  <h1 class="custom-login-title">S'inscrire</h1>
+
+  {{ form_start(registrationForm) }}
+
+  <label for="{{ registrationForm.email.vars.id }}" class="custom-login-label">Email<span style="color:var(--red-color);">*</span></label>
+  {{ form_widget(registrationForm.email, { attr: { class: "custom-login-input form-control" }}) }}
+  {{ form_errors(registrationForm.email) }}
+  </br>
+  <label for="{{ registrationForm.pseudo.vars.id }}" class="custom-login-label">Pseudo<span style="color:var(--red-color);">*</span></label>
+  {{ form_widget(registrationForm.pseudo, { attr: { class: "custom-login-input form-control" }}) }}
+  {{ form_errors(registrationForm.pseudo) }}
+
+  <div class="password-container">
+    <label for="{{ registrationForm.plainPassword.first.vars.id }}" class="custom-login-label">Mot de Passe<span style="color:var(--red-color);">*</span></label>
+    {{ form_widget(registrationForm.plainPassword.first, { attr: { class: "custom-login-input form-control" }}) }}
+    {{ form_errors(registrationForm.plainPassword.first) }}
+    <small>Le mot de passe doit contenir 8-20 caractères, au moins une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial (@$!%?&).<span style="color:var(--red-color);">*</span></small>
+  </br>
+    <label for="{{ registrationForm.plainPassword.second.vars.id }}" class="custom-login-label">Répéter le Mot de Passe<span style="color:var(--red-color);">*</span></label>
+    {{ form_widget(registrationForm.plainPassword.second, { attr: { class: "custom-login-input form-control" }}) }}
+    {{ form_errors(registrationForm.plainPassword.second) }}
+  </div>
+
+<label for="{{ registrationForm.imagesUsers.imageFile.vars.id }}" class="custom-login-label">Choisissez une image de profil<span style="color:var(--red-color);">*</span></label>
+{{ form_widget(registrationForm.imagesUsers.imageFile, { 'label': false }) }}
+
+  <div class="custom-login-checkbox">
+    {{ form_widget(registrationForm.agreeTerms) }}
+    {{ form_label(registrationForm.agreeTerms) }}
+  </div>
+
+  {{ form_end(registrationForm) }}
+</div>
+
+{% endblock %}

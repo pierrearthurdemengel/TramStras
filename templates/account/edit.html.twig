@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification des inforamtions du Compte{% endblock %}
+
+{% block stylesheet %}
+<style>
+body {
+  background-color: var(--background-color);
+  font-family: 'Arial', sans-serif;
+}
+
+.card {
+  background-color: var(--background-color);
+  border-radius: 15px;
+  padding: 20px;
+  margin: 20px auto;
+  width: 300px;
+  box-shadow: var(--card-shadow-neumorphism);
+  position: relative;
+  text-align: center;
+}
+
+.card p {
+  margin: 10px 0;
+  color: var(--black-color);
+}
+
+.btn {
+  display: inline-block;
+  text-decoration: none;
+  color: var(--black-color);
+  background-color: var(--background-color);
+  padding: 10px 20px;
+  border-radius: 8px;
+  box-shadow: var(--btn-shadow-neumorphism);
+  transition: var(--transition-speed);
+}
+
+.btn-primary {
+  color: var(--white-color);
+  background-color: var(--red-color);
+}
+
+.btn:hover {
+  box-shadow: var(--btn-shadow-inset-neumorphism);
+}
+
+.btn-primary:hover {
+  background-color: var(--darkred-color);
+}
+
+#ImgProfile {
+  max-width: 100%;
+  border-radius: 50%;
+}
+
+a[target="_blank"] {
+  color: var(--red-color);
+  text-decoration: none;
+}
+
+a[target="_blank"]:hover {
+  text-decoration: underline;
+}
+
+
+
+<style>
+{% endblock %}
+
+{% block body %}
+
+{% if app.user is defined %}
+
+<div class="card">
+	<h1>Bienvenue sur la modification des informations de votre compte !</h1>
+
+    {% for message in app.flashes('warning') %}
+    <div class="alert">
+        {{ message}}
+    </div>
+    {% endfor %}
+
+
+    {{ form(form)}}
+
+</div>
+
+{% endif %}
+
+{% endblock %}

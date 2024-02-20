@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% endblock %}
+{% block style %}
+<style>
+
+
+</style>
+{% endblock %}
+
+
+{% block body %}
+<div id="neumorphic-container">
+    <h1 class="page-title">
+        <a href="{{ path('app_categorie') }}">La liste des topics de {{ categorie.getNomCategorie() }}</a>
+    </h1>
+
+    {% if categorie.topics|length > 0 %}
+        <div class="topics-list">
+            {% for topic in categorie.topics %}
+                <div class="card neumorphism-card">
+                    <p class="topic-title">
+                        <a href="{{ path('app_topic_show', {'id': topic.id}) }}">{{ topic }}</a>
+                        {% if is_authenticated and topic.user == user %}
+                            </br><a class="btn btn-delete neumorphism-btn" href="{{ path('delete_topic', {'id': topic.id}) }}" 
+                            onclick="return confirmDelete('{{ path('delete_topic', {'id': topic.id}) }}');">Clôturer le Sujet</a>
+                        {% endif %}
+                    </p>
+                    <p class="topic-author">
+                        Créé par :
+                        {% if topic.user %}
+                            {{ topic.user.pseudo }}
+                        {% else %}
+                            Utilisateur inconnu
+                        {% endif %}
+                    </p>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="no-topic">Aucun topic disponible pour cette catégorie. Soyez le premier à en ouvrir un avec le formulaire ci-dessous.</p>
+    {% endif %}
+
+    <hr class="divider">
+    
+    {% if app.user %}
+        <div class="card neumorphism-card add-topic-card">
+            <h2 class="page-subtitle">Ajouter un nouveau topic</h2>
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <button type="submit" class="topic-link neumorphism-btn">Ajouter</button>
+            {{ form_end(form) }}
+        </div>
+    {% else %}
+        <p class="login-prompt">Vous devez être connecté pour ajouter un nouveau topic.</p>
+        <ul class="auth-links">
+            <li>
+                <a href="{{ path('app_login') }}" class="neumorphism-btn">Se connecter</a>
+            </li>
+            <li>
+                <a href="{{ path('app_register') }}" class="neumorphism-btn">S'inscrire</a>
+            </li>
+        </ul>
+    {% endif %}
+    
+    <script>
+        function confirmDelete(url) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer ce topic et tous ses posts associés ?')) {
+                window.location.href = url;
+            }
+            return false;
+        }
+    </script>
+{% endblock %}
+
